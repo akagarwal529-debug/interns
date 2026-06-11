@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Free – InternSaathi</title>
+  <meta name="description" content="Create your free InternSaathi account and start finding verified internships across India today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0B1D3A;
+      --navy-light: #132244;
+      --orange: #FF5F1F;
+      --orange-hover: #E54E0E;
+      --green: #22C55E;
+      --border: #E5E7EB;
+      --text-dark: #0F172A;
+      --text-mid: #374151;
+      --text-light: #6B7280;
+      --bg-light: #F9FAFB;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #F0F4FF; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ---- NAVBAR ---- */
+    .navbar {
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); flex-shrink: 0;
+    }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .nav-divider { width: 1px; height: 32px; background: var(--border); }
+    .logo-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 15px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 800; color: var(--navy); text-decoration: none; }
+    .nav-logo span { color: var(--orange); }
+    .nav-sunsys { height: 42px; width: auto; object-fit: contain; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .btn-nav-signin {
+      padding: 8px 18px; background: transparent; color: var(--navy);
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-nav-signin:hover { border-color: var(--navy); background: var(--bg-light); }
+
+    /* ---- MAIN ---- */
+    .page-body {
+      flex: 1; display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ---- LEFT PANEL ---- */
+    .left-panel {
+      background: linear-gradient(145deg, #0B1D3A 0%, #1a3a6e 100%);
+      padding: 56px 48px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .left-panel::before {
+      content: ''; position: absolute; top: -120px; right: -120px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,95,31,0.18) 0%, transparent 70%);
+    }
+    .left-panel::after {
+      content: ''; position: absolute; bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%);
+    }
+    .left-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);
+      color: #4ade80; padding: 6px 14px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; margin-bottom: 28px; width: fit-content;
+    }
+    .left-dot { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+    .left-title { font-size: 34px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 14px; }
+    .left-title span { color: var(--orange); }
+    .left-sub { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 32px; }
+    .feature-list { display: flex; flex-direction: column; gap: 12px; }
+    .feature-item { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 500; }
+    .feature-icon { width: 34px; height: 34px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+    .testimonial-mini {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 20px;
+      margin-top: 32px;
+    }
+    .stars-mini { color: #FBBF24; font-size: 14px; margin-bottom: 10px; }
+    .quote { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.6; font-style: italic; margin-bottom: 14px; }
+    .reviewer { display: flex; align-items: center; gap: 10px; }
+    .reviewer-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
+    .reviewer-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .reviewer-role { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+    /* ---- RIGHT PANEL ---- */
+    .right-panel {
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px 40px; overflow-y: auto;
+    }
+    .form-box { width: 100%; max-width: 440px; }
+    .form-title { font-size: 26px; font-weight: 900; color: var(--navy); margin-bottom: 4px; }
+    .form-sub { font-size: 13.5px; color: var(--text-light); margin-bottom: 24px; }
+    .form-sub a { color: var(--orange); font-weight: 600; text-decoration: none; }
+    .form-sub a:hover { text-decoration: underline; }
+
+    /* Role Selector */
+    .role-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-mid); margin-bottom: 10px; }
+    .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .role-card {
+      border: 2px solid var(--border); border-radius: 10px;
+      padding: 14px 10px; text-align: center; cursor: pointer;
+      transition: all 0.2s; background: #fff;
+    }
+    .role-card:hover { border-color: var(--navy); background: #F8FAFF; }
+    .role-card.selected { border-color: var(--navy); background: #EEF2FF; }
+    .role-card .role-emoji { font-size: 24px; margin-bottom: 6px; }
+    .role-card .role-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+    .role-card .role-desc { font-size: 10.5px; color: var(--text-light); margin-top: 2px; }
+
+    /* Social */
+    .social-login { display: flex; gap: 12px; margin-bottom: 20px; }
+    .social-btn-lg {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      background: #fff; font-size: 13px; font-weight: 600;
+      color: var(--text-dark); cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .social-btn-lg:hover { background: var(--bg-light); border-color: #D1D5DB; }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; color: var(--text-light); font-size: 12.5px;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Fields */
+    .field-group { margin-bottom: 14px; }
+    .field-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+    .field-wrap { position: relative; display: flex; align-items: center; }
+    .field-icon-left { position: absolute; left: 13px; color: var(--text-light); font-size: 16px; pointer-events: none; }
+    .form-input {
+      width: 100%; padding: 11px 14px 11px 40px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: var(--text-dark); background: #fff; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(11,29,58,0.08); }
+    .form-input.error { border-color: #EF4444; }
+    .field-toggle { position: absolute; right: 13px; background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-light); padding: 4px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .error-msg { font-size: 11.5px; color: #EF4444; margin-top: 4px; display: none; }
+
+    /* Password Strength */
+    .strength-wrap { margin-top: 8px; }
+    .strength-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin-bottom: 4px; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: all 0.3s; width: 0; }
+    .strength-text { font-size: 11.5px; color: var(--text-light); }
+
+    /* Terms */
+    .terms-wrap { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; margin-top: 4px; }
+    .terms-wrap input[type="checkbox"] { width: 15px; height: 15px; margin-top: 2px; accent-color: var(--navy); cursor: pointer; flex-shrink: 0; }
+    .terms-wrap label { font-size: 12.5px; color: var(--text-light); cursor: pointer; line-height: 1.5; }
+    .terms-wrap label a { color: var(--navy); font-weight: 600; text-decoration: none; }
+    .terms-wrap label a:hover { color: var(--orange); }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%; padding: 14px; background: var(--orange);
+      color: #fff; border: none; border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .btn-submit:hover { background: var(--orange-hover); box-shadow: 0 4px 14px rgba(255,95,31,0.35); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .signin-link-text { text-align: center; font-size: 13px; color: var(--text-light); }
+    .signin-link-text a { color: var(--navy); font-weight: 700; text-decoration: none; }
+    .signin-link-text a:hover { color: var(--orange); }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 22px; border-radius: 10px; font-size: 14px; font-weight: 600; color: #fff; background: var(--navy); box-shadow: 0 8px 24px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.35s cubic-bezier(.4,0,.2,1); z-index: 9999; display: flex; align-items: center; gap: 10px; }
+
+    /* Success overlay */
+    #success-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 9998;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .success-box {
+      background: #fff; border-radius: 24px;
+      padding: 48px 40px; max-width: 420px; width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+      animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+    .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-title { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+    .success-sub { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 28px; }
+
+    /* Responsive */
+    @media (max-width: 900px) { .page-body { grid-template-columns: 1fr; } .left-panel { display: none; } }
+    @media (max-width: 480px) { .right-panel { padding: 28px 16px; } .social-login { flex-direction: column; } .two-col { grid-template-columns: 1fr; } .role-grid { grid-template-columns: 1fr; } .navbar { padding: 0 16px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-left">
+    <img src="sunsys-logo.jpeg" alt="SunSys Techsol" class="nav-sunsys" />
+    <div class="nav-divider"></div>
+    <a href="index (2).html" class="nav-logo">
+      <div class="logo-icon">IS</div>
+      InternSaathi<span>.com</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <span style="font-size:13px;color:var(--text-light)">Already have an account?</span>
+    <a href="signin.html" class="btn-nav-signin">Sign In</a>
+  </div>
+</header>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div>
+      <div class="left-badge">
+        <span class="left-dot"></span>
+        Join 10,000+ Students Today
+      </div>
+      <h2 class="left-title">
+        Start your career<br />
+        journey with <span>InternSaathi</span>
+      </h2>
+      <p class="left-sub">
+        Create your free account in under 2 minutes and unlock access to thousands of verified internships across India.
+      </p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🆓</div>
+          <span>100% free — no credit card required</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <span>Verified internships from top companies</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <span>Apply to internships in one click</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🏅</div>
+          <span>Get certificates on completion</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <span>Career support & resume reviews</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-mini">
+      <div class="stars-mini">★★★★★</div>
+      <p class="quote">"I registered on InternSaathi and within 2 weeks I had 3 interview calls. Got my first paid internship at ₹20,000/month. Absolutely love this platform!"</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2)">PS</div>
+        <div>
+          <div class="reviewer-name">Priya Sharma</div>
+          <div class="reviewer-role">B.Tech · IIT Bombay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-box">
+      <h1 class="form-title">Create your free account</h1>
+      <p class="form-sub">
+        Already have an account? <a href="signin.html">Sign in here →</a>
+      </p>
+
+      <!-- Role Selector -->
+      <span class="role-label">I am a...</span>
+      <div class="role-grid" id="role-grid">
+        <div class="role-card selected" data-role="student" onclick="selectRole(this)">
+          <div class="role-emoji">🎓</div>
+          <div class="role-name">Student</div>
+          <div class="role-desc">Find internships</div>
+        </div>
+        <div class="role-card" data-role="recruiter" onclick="selectRole(this)">
+          <div class="role-emoji">🏢</div>
+          <div class="role-name">Recruiter</div>
+          <div class="role-desc">Post internships</div>
+        </div>
+        <div class="role-card" data-role="college" onclick="selectRole(this)">
+          <div class="role-emoji">🏫</div>
+          <div class="role-name">College</div>
+          <div class="role-desc">Partner with us</div>
+        </div>
+      </div>
+
+      <!-- Social Signup -->
+      <div class="social-login">
+        <button class="social-btn-lg" onclick="socialSignup('Google')">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Sign up with Google
+        </button>
+        <button class="social-btn-lg" onclick="socialSignup('LinkedIn')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Sign up with LinkedIn
+        </button>
+      </div>
+
+      <div class="divider">or register with email</div>
+
+      <!-- Form -->
+      <form id="register-form" novalidate>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label" for="fname">First Name</label>
+            <div class="field-wrap">
+              <span class="field-icon-left">👤</span>
+              <input class="form-input" id="fname" type="text" placeholder="First name" autocomplete="given-name" />
+            </div>
+            <span class="error-msg" id="fname-error">First name is required.</span>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lname">Last Name</label>
+            <div class="field-wrap">
+              <span class="field-icon-left">👤</span>
+              <input class="form-input" id="lname" type="text" placeholder="Last name" autocomplete="family-name" />
+            </div>
+            <span class="error-msg" id="lname-error">Last name is required.</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="email">Email Address</label>
+          <div class="field-wrap">
+            <span class="field-icon-left">✉️</span>
+            <input class="form-input" id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <span class="error-msg" id="email-error">Please enter a valid email address.</span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="phone">Phone Number</label>
+          <div class="field-wrap">
+            <span class="field-icon-left">📱</span>
+            <input class="form-input" id="phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel" style="padding-left:40px" />
+          </div>
+          <span class="error-msg" id="phone-error">Please enter a valid phone number.</span>
+        </div>
+
+        <!-- Student-specific field -->
+        <div class="field-group" id="college-field">
+          <label class="field-label" for="college">College / University</label>
+          <div class="field-wrap">
+            <span class="field-icon-left">🏫</span>
+            <input class="form-input" id="college" type="text" placeholder="e.g. IIT Bombay, DU, VIT..." />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="password">Password</label>
+          <div class="field-wrap">
+            <span class="field-icon-left">🔒</span>
+            <input class="form-input" id="password" type="password" placeholder="Create a strong password" autocomplete="new-password" oninput="checkStrength(this.value)" />
+            <button type="button" class="field-toggle" id="toggle-pw" aria-label="Toggle password">👁️</button>
+          </div>
+          <div class="strength-wrap">
+            <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+            <span class="strength-text" id="strength-text">Enter a password</span>
+          </div>
+          <span class="error-msg" id="pw-error">Password must be at least 8 characters.</span>
+        </div>
+
+        <div class="terms-wrap">
+          <input type="checkbox" id="terms" />
+          <label for="terms">
+            I agree to InternSaathi's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I consent to receiving email notifications about relevant internships.
+          </label>
+        </div>
+        <span class="error-msg" id="terms-error" style="display:none;margin-top:-14px;margin-bottom:14px">Please accept the terms to continue.</span>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <div class="spinner" id="spinner"></div>
+          <span id="btn-text">Create Free Account →</span>
+        </button>
+      </form>
+
+      <p class="signin-link-text">
+        Already have an account? <a href="signin.html">Sign in here</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div id="success-overlay">
+  <div class="success-box">
+    <div class="success-icon">🎉</div>
+    <h2 class="success-title">Welcome to InternSaathi!</h2>
+    <p class="success-sub" id="success-msg">Your account has been created successfully. Let's find you the perfect internship!</p>
+    <button onclick="goHome()" style="width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='var(--orange)'" onmouseout="this.style.background='var(--navy)'">
+      Explore Internships →
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script src="api.js"></script>
+<script>
+  // Redirect if already logged in
+  if (isLoggedIn()) { window.location.href = 'dashboard.html'; }
+
+  // ---- ROLE SELECTION ----
+  let selectedRole = 'student';
+  function selectRole(card) {
+    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedRole = card.dataset.role;
+    // Show/hide college field
+    const cf = document.getElementById('college-field');
+    cf.style.display = selectedRole === 'student' ? 'block' : 'none';
+  }
+
+  // ---- TOAST ----
+  function showToast(msg, icon = '✅') {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-icon').textContent = icon;
+    t.style.transform = 'translateY(0)'; t.style.opacity = '1';
+    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3000);
+  }
+
+  // ---- SOCIAL SIGNUP ----
+  function socialSignup(provider) {
+    showToast(`${provider} signup coming soon!`, '🔗');
+  }
+
+  // ---- PASSWORD TOGGLE ----
+  const pwInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('toggle-pw');
+  let shown = false;
+  toggleBtn.addEventListener('click', () => {
+    shown = !shown;
+    pwInput.type = shown ? 'text' : 'password';
+    toggleBtn.textContent = shown ? '🙈' : '👁️';
+  });
+
+  // ---- PASSWORD STRENGTH ----
+  function checkStrength(val) {
+    const fill = document.getElementById('strength-fill');
+    const text = document.getElementById('strength-text');
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const levels = [
+      { w: '0%',   color: 'transparent', label: 'Enter a password' },
+      { w: '25%',  color: '#EF4444',     label: '😟 Weak' },
+      { w: '50%',  color: '#F59E0B',     label: '😐 Fair' },
+      { w: '75%',  color: '#3B82F6',     label: '🙂 Good' },
+      { w: '100%', color: '#22C55E',     label: '💪 Strong!' }
+    ];
+    const lv = val.length === 0 ? 0 : Math.max(1, score);
+    fill.style.width = levels[lv].w;
+    fill.style.background = levels[lv].color;
+    text.textContent = levels[lv].label;
+    text.style.color = levels[lv].color === 'transparent' ? 'var(--text-light)' : levels[lv].color;
+  }
+
+  // ---- FORM VALIDATION & API SUBMIT ----
+  document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const fields = {
+      fname: { el: document.getElementById('fname'), err: document.getElementById('fname-error'), check: v => v.trim().length > 0, msg: 'First name is required.' },
+      lname: { el: document.getElementById('lname'), err: document.getElementById('lname-error'), check: v => v.trim().length > 0, msg: 'Last name is required.' },
+      email: { el: document.getElementById('email'), err: document.getElementById('email-error'), check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg: 'Please enter a valid email address.' },
+      phone: { el: document.getElementById('phone'), err: document.getElementById('phone-error'), check: v => v.trim().length >= 7, msg: 'Please enter a valid phone number.' },
+      password: { el: document.getElementById('password'), err: document.getElementById('pw-error'), check: v => v.length >= 8, msg: 'Password must be at least 8 characters.' }
+    };
+
+    let valid = true;
+
+    Object.values(fields).forEach(f => {
+      f.el.classList.remove('error');
+      f.err.style.display = 'none';
+      if (!f.check(f.el.value)) {
+        f.el.classList.add('error');
+        f.err.style.display = 'block';
+        valid = false;
+      }
+    });
+
+    const termsEl = document.getElementById('terms');
+    const termsErr = document.getElementById('terms-error');
+    if (!termsEl.checked) {
+      termsErr.style.display = 'block';
+      valid = false;
+    } else {
+      termsErr.style.display = 'none';
+    }
+
+    if (!valid) { showToast('Please fix the errors above!', '⚠️'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btn-text');
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Creating account...';
+
+    try {
+      // Build API payload
+      const payload = {
+        firstName: document.getElementById('fname').value.trim(),
+        lastName: document.getElementById('lname').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value,
+        role: selectedRole
+      };
+
+      if (selectedRole === 'student') {
+        payload.college = document.getElementById('college').value.trim();
+      }
+
+      // Call API
+      const data = await AuthAPI.register(payload);
+      
+      // Store auth
+      setAuth(data.token, data.user);
+
+      // Success UI
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Create Free Account →';
+
+      document.getElementById('success-msg').textContent = `Welcome, ${payload.firstName}! Your account has been created. Let's get started!`;
+      document.getElementById('success-overlay').style.display = 'flex';
+      
+    } catch (err) {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Create Free Account →';
+      showToast(err.message || 'Registration failed. Please try again.', '⚠️');
+      
+      // Handle express-validator errors array if present
+      if (err.errors && Array.isArray(err.errors)) {
+          err.errors.forEach(e => showToast(e.msg, '⚠️'));
+      }
+    }
+  });
+
+  function goHome() {
+    window.location.href = 'dashboard.html';
+  }
+</script>
+</body>
+</html>

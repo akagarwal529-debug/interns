@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – InternSaathi</title>
+  <meta name="description" content="Manage your internship applications, saved listings, and profile on InternSaathi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--navy:#0B1D3A;--orange:#FF5F1F;--orange-hover:#E54E0E;--green:#22C55E;--blue:#2563EB;--border:#E5E7EB;--text-dark:#0F172A;--text-mid:#374151;--text-light:#6B7280;--bg-light:#F9FAFB;--radius:10px;--shadow:0 2px 10px rgba(0,0,0,0.08)}
+    body{font-family:'Inter',sans-serif;background:var(--bg-light);min-height:100vh}
+
+    /* Navbar */
+    .navbar{background:#fff;border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.06);position:sticky;top:0;z-index:100}
+    .nav-left{display:flex;align-items:center;gap:14px}
+    .nav-divider{width:1px;height:32px;background:var(--border)}
+    .logo-icon{width:32px;height:32px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px}
+    .nav-logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;color:var(--navy);text-decoration:none}
+    .nav-logo span{color:var(--orange)}
+    .nav-sunsys{height:42px;width:auto;object-fit:contain}
+    .nav-right{display:flex;align-items:center;gap:14px}
+    .nav-user{display:flex;align-items:center;gap:10px;padding:6px 14px;background:var(--bg-light);border-radius:8px;font-size:13px;font-weight:600;color:var(--navy)}
+    .nav-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+    .btn-logout{padding:8px 16px;background:transparent;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-mid);transition:all 0.2s;font-family:inherit}
+    .btn-logout:hover{border-color:#EF4444;color:#EF4444;background:#FEF2F2}
+
+    /* Layout */
+    .dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px)}
+
+    /* Sidebar */
+    .sidebar{background:#fff;border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;gap:4px}
+    .sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all 0.2s;border:none;background:transparent;font-family:inherit;width:100%;text-align:left}
+    .sidebar-item:hover{background:var(--bg-light);color:var(--navy)}
+    .sidebar-item.active{background:#EEF2FF;color:var(--navy);font-weight:700}
+    .sidebar-item .ico{font-size:18px;width:24px;text-align:center}
+    .sidebar-sep{height:1px;background:var(--border);margin:12px 0}
+
+    /* Main */
+    .dash-main{padding:32px 40px;overflow-y:auto}
+    .page-title{font-size:26px;font-weight:900;color:var(--navy);margin-bottom:4px}
+    .page-sub{font-size:14px;color:var(--text-light);margin-bottom:28px}
+
+    /* Stat Cards */
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);transition:all 0.2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+    .stat-icon-box{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+    .stat-val{font-size:24px;font-weight:900;color:var(--navy)}
+    .stat-lbl{font-size:12px;color:var(--text-light);margin-top:2px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid var(--border);padding-bottom:0}
+    .tab{padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--text-light);cursor:pointer;border:none;background:transparent;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s}
+    .tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+    .tab:hover{color:var(--navy)}
+
+    /* Section */
+    .section-panel{display:none}
+    .section-panel.active{display:block}
+
+    /* Application Cards */
+    .app-list{display:flex;flex-direction:column;gap:14px}
+    .app-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);transition:all 0.2s}
+    .app-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+    .app-logo{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;flex-shrink:0}
+    .app-info{flex:1}
+    .app-title{font-size:15px;font-weight:700;color:var(--text-dark)}
+    .app-company{font-size:12.5px;color:var(--text-light);margin-top:2px}
+    .app-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .app-tag{font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;background:var(--bg-light);color:var(--text-mid)}
+    .app-status{display:flex;align-items:center;gap:16px;flex-shrink:0}
+    .status-badge{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;text-transform:capitalize}
+    .status-applied{background:#EFF6FF;color:#1D4ED8}
+    .status-reviewing{background:#FFF7ED;color:#C2410C}
+    .status-shortlisted{background:#F0FDF4;color:#15803D}
+    .status-selected{background:#ECFDF5;color:#047857;border:1px solid #A7F3D0}
+    .status-rejected{background:#FEF2F2;color:#DC2626}
+    .btn-withdraw{padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--text-light);transition:all 0.2s;font-family:inherit}
+    .btn-withdraw:hover{border-color:#EF4444;color:#EF4444;background:#FEF2F2}
+
+    /* Profile */
+    .profile-form{max-width:560px}
+    .field-group{margin-bottom:18px}
+    .field-label{display:block;font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+    .form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;color:var(--text-dark);outline:none;transition:border-color 0.2s}
+    .form-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,29,58,0.08)}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .btn-save{padding:12px 28px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+    .btn-save:hover{background:var(--orange)}
+
+    /* Saved */
+    .saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .saved-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+    .saved-card .s-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:4px}
+    .saved-card .s-company{font-size:12px;color:var(--text-light);margin-bottom:8px}
+    .saved-card .s-pay{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px}
+    .saved-btns{display:flex;gap:8px}
+    .btn-view{padding:7px 14px;background:var(--navy);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit}
+    .btn-view:hover{background:var(--orange)}
+    .btn-unsave{padding:7px 14px;background:#fff;color:var(--text-light);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit}
+    .btn-unsave:hover{border-color:#EF4444;color:#EF4444}
+
+    /* Empty State */
+    .empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
+    .empty-state .emoji{font-size:48px;margin-bottom:16px}
+    .empty-state .msg{font-size:15px;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+    .empty-state .sub{font-size:13px}
+    .empty-state a{color:var(--orange);text-decoration:none;font-weight:600}
+
+    /* Toast */
+    #toast{position:fixed;bottom:28px;right:28px;padding:14px 22px;border-radius:10px;font-size:14px;font-weight:600;color:#fff;background:var(--navy);box-shadow:0 8px 24px rgba(0,0,0,0.2);transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(.4,0,.2,1);z-index:9999;display:flex;align-items:center;gap:10px}
+
+    /* Responsive */
+    @media(max-width:900px){
+      .dash-layout{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .stat-row{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:480px){
+      .dash-main{padding:20px 16px}
+      .stat-row{grid-template-columns:1fr}
+      .navbar{padding:0 16px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-left">
+    <img src="sunsys-logo.jpeg" alt="SunSys Techsol" class="nav-sunsys" />
+    <div class="nav-divider"></div>
+    <a href="index (2).html" class="nav-logo">
+      <div class="logo-icon">IS</div>
+      InternSaathi<span>.com</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-user">
+      <div class="nav-avatar" id="user-avatar">?</div>
+      <span id="user-name-nav">Loading...</span>
+    </div>
+    <button class="btn-logout" id="logout-btn">Sign Out</button>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <button class="sidebar-item active" data-section="overview" onclick="switchSection('overview', this)">
+      <span class="ico">📊</span> Overview
+    </button>
+    <button class="sidebar-item" data-section="applications" onclick="switchSection('applications', this)">
+      <span class="ico">📋</span> My Applications
+    </button>
+    <button class="sidebar-item" data-section="saved" onclick="switchSection('saved', this)">
+      <span class="ico">🔖</span> Saved Internships
+    </button>
+    <div class="sidebar-sep"></div>
+    <button class="sidebar-item" data-section="profile" onclick="switchSection('profile', this)">
+      <span class="ico">👤</span> My Profile
+    </button>
+    <div class="sidebar-sep"></div>
+    <a href="index (2).html" class="sidebar-item" style="text-decoration:none">
+      <span class="ico">🔍</span> Browse Internships
+    </a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="dash-main">
+
+    <!-- ─── OVERVIEW ─── -->
+    <div class="section-panel active" id="sec-overview">
+      <h1 class="page-title" id="welcome-msg">Welcome back!</h1>
+      <p class="page-sub">Here's an overview of your internship journey.</p>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:#EFF6FF">📋</div>
+          <div><div class="stat-val" id="s-applied">0</div><div class="stat-lbl">Applications</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:#FFF7ED">⏳</div>
+          <div><div class="stat-val" id="s-reviewing">0</div><div class="stat-lbl">Under Review</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:#F0FDF4">🎉</div>
+          <div><div class="stat-val" id="s-shortlisted">0</div><div class="stat-lbl">Shortlisted</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-box" style="background:#F5F3FF">🔖</div>
+          <div><div class="stat-val" id="s-saved">0</div><div class="stat-lbl">Saved</div></div>
+        </div>
+      </div>
+
+      <h2 style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Recent Applications</h2>
+      <div class="app-list" id="recent-apps">
+        <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications yet</div><div class="sub"><a href="index (2).html">Browse internships</a> and start applying!</div></div>
+      </div>
+    </div>
+
+    <!-- ─── MY APPLICATIONS ─── -->
+    <div class="section-panel" id="sec-applications">
+      <h1 class="page-title">My Applications</h1>
+      <p class="page-sub">Track all your internship applications in one place.</p>
+      <div class="tabs">
+        <button class="tab active" onclick="filterApps('all',this)">All</button>
+        <button class="tab" onclick="filterApps('applied',this)">Applied</button>
+        <button class="tab" onclick="filterApps('reviewing',this)">Reviewing</button>
+        <button class="tab" onclick="filterApps('shortlisted',this)">Shortlisted</button>
+        <button class="tab" onclick="filterApps('selected',this)">Selected</button>
+        <button class="tab" onclick="filterApps('rejected',this)">Rejected</button>
+      </div>
+      <div class="app-list" id="all-apps">
+        <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications</div><div class="sub"><a href="index (2).html">Browse internships</a> and apply!</div></div>
+      </div>
+    </div>
+
+    <!-- ─── SAVED ─── -->
+    <div class="section-panel" id="sec-saved">
+      <h1 class="page-title">Saved Internships</h1>
+      <p class="page-sub">Internships you've bookmarked for later.</p>
+      <div class="saved-grid" id="saved-grid">
+        <div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔖</div><div class="msg">No saved internships</div><div class="sub"><a href="index (2).html">Browse and save</a> internships you like!</div></div>
+      </div>
+    </div>
+
+    <!-- ─── PROFILE ─── -->
+    <div class="section-panel" id="sec-profile">
+      <h1 class="page-title">My Profile</h1>
+      <p class="page-sub">Keep your profile updated to stand out to recruiters.</p>
+      <form class="profile-form" id="profile-form">
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">First Name</label>
+            <input class="form-input" id="pf-fname" placeholder="First name" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Last Name</label>
+            <input class="form-input" id="pf-lname" placeholder="Last name" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email (read-only)</label>
+          <input class="form-input" id="pf-email" readonly style="background:#F3F4F6;cursor:not-allowed" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Phone</label>
+          <input class="form-input" id="pf-phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">College / University</label>
+          <input class="form-input" id="pf-college" placeholder="e.g. IIT Bombay" />
+        </div>
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Degree</label>
+            <input class="form-input" id="pf-degree" placeholder="e.g. B.Tech CSE" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Graduation Year</label>
+            <input class="form-input" id="pf-year" type="number" placeholder="2026" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Skills (comma separated)</label>
+          <input class="form-input" id="pf-skills" placeholder="React, Python, Figma..." />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Short Bio</label>
+          <textarea class="form-input" id="pf-bio" rows="3" placeholder="Tell recruiters about yourself..." style="resize:vertical"></textarea>
+        </div>
+        <button type="submit" class="btn-save">Save Profile →</button>
+      </form>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span id="toast-icon">✅</span><span id="toast-msg">Done!</span></div>
+
+<script src="api.js"></script>
+<script>
+  // ── Guard: redirect if not logged in ──
+  if (!isLoggedIn()) { window.location.href = 'signin.html'; }
+
+  let allApplications = [];
+
+  // ── Init ──
+  async function init() {
+    try {
+      const user = getUser();
+      if (user) {
+        document.getElementById('user-name-nav').textContent = user.firstName + ' ' + (user.lastName || '');
+        document.getElementById('user-avatar').textContent = (user.firstName?.[0]||'') + (user.lastName?.[0]||'');
+        document.getElementById('welcome-msg').textContent = `Welcome back, ${user.firstName}! 👋`;
+        fillProfile(user);
+      }
+      await loadApplications();
+      await loadSaved();
+    } catch (err) {
+      console.error('Init error:', err);
+    }
+  }
+
+  // ── Load Applications ──
+  async function loadApplications() {
+    try {
+      const data = await ApplicationAPI.myApps();
+      allApplications = data.applications || [];
+      renderApps(allApplications, 'all-apps');
+      renderApps(allApplications.slice(0, 3), 'recent-apps');
+
+      // Stats
+      document.getElementById('s-applied').textContent    = allApplications.length;
+      document.getElementById('s-reviewing').textContent   = allApplications.filter(a => a.status === 'reviewing').length;
+      document.getElementById('s-shortlisted').textContent = allApplications.filter(a => a.status === 'shortlisted' || a.status === 'selected').length;
+    } catch (err) {
+      console.log('Could not load applications:', err.message);
+    }
+  }
+
+  function renderApps(apps, containerId) {
+    const container = document.getElementById(containerId);
+    if (!apps.length) {
+      container.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications found</div><div class="sub"><a href="index (2).html">Browse internships</a> and start applying!</div></div>';
+      return;
+    }
+    container.innerHTML = apps.map(app => `
+      <div class="app-card" data-status="${app.status}">
+        <div class="app-logo" style="background:${app.internship?.companyColor || '#0B1D3A'}">${(app.internship?.company?.[0] || 'I')}</div>
+        <div class="app-info">
+          <div class="app-title">${app.internship?.title || 'Internship'}</div>
+          <div class="app-company">${app.internship?.company || ''} · ${app.internship?.location || ''}</div>
+          <div class="app-meta">
+            <span class="app-tag">${app.internship?.type || 'online'}</span>
+            <span class="app-tag">${app.internship?.duration || ''}</span>
+            <span class="app-tag">₹${(app.internship?.stipend || 0).toLocaleString()}/mo</span>
+          </div>
+        </div>
+        <div class="app-status">
+          <span class="status-badge status-${app.status}">${app.status}</span>
+          ${app.status === 'applied' ? `<button class="btn-withdraw" onclick="withdrawApp('${app._id}')">Withdraw</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterApps(status, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = status === 'all' ? allApplications : allApplications.filter(a => a.status === status);
+    renderApps(filtered, 'all-apps');
+  }
+
+  async function withdrawApp(id) {
+    if (!confirm('Are you sure you want to withdraw this application?')) return;
+    try {
+      await ApplicationAPI.withdraw(id);
+      showToast('Application withdrawn.', '✅');
+      await loadApplications();
+    } catch (err) { showToast(err.message, '⚠️'); }
+  }
+
+  // ── Load Saved ──
+  async function loadSaved() {
+    try {
+      const data = await UserAPI.saved();
+      const saved = data.saved || [];
+      document.getElementById('s-saved').textContent = saved.length;
+      const grid = document.getElementById('saved-grid');
+      if (!saved.length) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔖</div><div class="msg">No saved internships</div><div class="sub"><a href="index (2).html">Browse and save</a> internships you like!</div></div>';
+        return;
+      }
+      grid.innerHTML = saved.map(s => `
+        <div class="saved-card">
+          <div class="s-title">${s.title}</div>
+          <div class="s-company">${s.company} · ${s.location}</div>
+          <div class="s-pay">₹${(s.stipend || 0).toLocaleString()}/month</div>
+          <div class="saved-btns">
+            <button class="btn-view" onclick="window.location.href='index (2).html'">View</button>
+            <button class="btn-unsave" onclick="unsaveJob('${s._id}')">Remove</button>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) { console.log('Could not load saved:', err.message); }
+  }
+
+  async function unsaveJob(id) {
+    try {
+      await UserAPI.save(id);
+      showToast('Removed from saved.', '✅');
+      await loadSaved();
+    } catch (err) { showToast(err.message, '⚠️'); }
+  }
+
+  // ── Profile ──
+  function fillProfile(user) {
+    document.getElementById('pf-fname').value   = user.firstName || '';
+    document.getElementById('pf-lname').value   = user.lastName || '';
+    document.getElementById('pf-email').value   = user.email || '';
+    document.getElementById('pf-phone').value   = user.phone || '';
+    document.getElementById('pf-college').value = user.college || '';
+    document.getElementById('pf-degree').value  = user.degree || '';
+    document.getElementById('pf-year').value    = user.graduationYear || '';
+    document.getElementById('pf-skills').value  = (user.skills || []).join(', ');
+    document.getElementById('pf-bio').value     = user.bio || '';
+  }
+
+  document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const body = {
+        firstName:      document.getElementById('pf-fname').value.trim(),
+        lastName:       document.getElementById('pf-lname').value.trim(),
+        phone:          document.getElementById('pf-phone').value.trim(),
+        college:        document.getElementById('pf-college').value.trim(),
+        degree:         document.getElementById('pf-degree').value.trim(),
+        graduationYear: Number(document.getElementById('pf-year').value) || undefined,
+        skills:         document.getElementById('pf-skills').value.split(',').map(s => s.trim()).filter(Boolean),
+        bio:            document.getElementById('pf-bio').value.trim(),
+      };
+      const data = await UserAPI.update(body);
+      setAuth(getToken(), data.user);
+      showToast('Profile updated! ✅', '✅');
+      document.getElementById('user-name-nav').textContent = body.firstName + ' ' + body.lastName;
+    } catch (err) { showToast(err.message, '⚠️'); }
+  });
+
+  // ── Sidebar Navigation ──
+  function switchSection(sectionId, btn) {
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + sectionId)?.classList.add('active');
+    btn?.classList.add('active');
+  }
+
+  // ── Logout ──
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    clearAuth();
+    window.location.href = 'signin.html';
+  });
+
+  // ── Go! ──
+  init();
+</script>
+</body>
+</html>
