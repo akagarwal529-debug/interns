@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://internsaathi.netlify.app/sitemap.xml

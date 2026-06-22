@@ -11,7 +11,19 @@ connectDB();
 const app = express();
 
 // ── Middleware ───────────────────────────────────────────
-app.use(cors({ origin: '*', methods: ['GET','POST','PUT','DELETE'], allowedHeaders: ['Content-Type','Authorization'] }));
+app.use(cors({
+  origin: [
+    'http://localhost:5000',
+    'http://127.0.0.1:5500',
+    'http://localhost:3000',
+    'https://internsaathi.netlify.app',
+    'https://internsaathi.com',
+    'https://www.internsaathi.com'
+  ],
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
