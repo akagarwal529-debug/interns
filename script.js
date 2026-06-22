@@ -122,27 +122,31 @@ document.getElementById('modal-overlay')?.addEventListener('click', function (e)
 // ---------- SEARCH FUNCTIONALITY ----------
 document.getElementById('find-btn')?.addEventListener('click', async () => {
   const keyword = document.getElementById('search-keyword').value.trim();
-  const city = document.getElementById('search-city').value;
-  const pay = document.getElementById('search-pay').value;
-  const activeType = document.querySelector('.type-btn.active')?.textContent || 'All';
+  const city    = document.getElementById('search-city').value;
+  const pay     = document.getElementById('search-pay').value;
+  const state   = document.getElementById('search-state').value;
+  const activeTypeBtn = document.querySelector('.type-btn.active');
+  const activeType = activeTypeBtn?.dataset.type || 'all';
 
   showToast('Searching internships...', '🔍');
-  
+
   const params = {};
-  if (keyword) params.keyword = keyword;
-  if (city !== 'Select City') params.city = city;
-  if (activeType !== 'All') params.type = activeType.toLowerCase();
-  if (pay !== 'Stipend Range') {
-     if (pay === '0-5000') { params.minPay = 0; params.maxPay = 5000; }
-     else if (pay === '5000-15000') { params.minPay = 5000; params.maxPay = 15000; }
-     else if (pay === '15000+') { params.minPay = 15000; }
-  }
+  if (keyword)                params.keyword = keyword;
+  if (city)                   params.city    = city;
+  if (state)                  params.state   = state;
+  if (activeType !== 'all')   params.type    = activeType;  // 'remote' | 'hybrid' | 'onsite'
+
+  // Stipend range parsing
+  if (pay === '₹5,000 – ₹10,000')   { params.minPay = 5000;  params.maxPay = 10000; }
+  else if (pay === '₹10,000 – ₹20,000') { params.minPay = 10000; params.maxPay = 20000; }
+  else if (pay === '₹20,000 – ₹30,000') { params.minPay = 20000; params.maxPay = 30000; }
+  else if (pay === '₹30,000+')        { params.minPay = 30000; }
 
   try {
     const data = await InternshipAPI.getAll(params);
     const container = document.getElementById('internships-container');
     const internships = data.internships || [];
-    
+
     if (internships.length === 0) {
       container.innerHTML = `<div style="text-align:center;grid-column:1/-1;padding:40px;color:var(--text-light)">No results found for your search.</div>`;
     } else {
@@ -172,10 +176,10 @@ document.getElementById('find-btn')?.addEventListener('click', async () => {
       `).join('');
       document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
     }
-    
+
     document.getElementById('latest').scrollIntoView({ behavior: 'smooth' });
   } catch (err) {
-    showToast('Search failed.', '⚠️');
+    showToast('Search failed. Please ensure the backend is running.', '⚠️');
   }
 });
 
@@ -183,6 +187,7 @@ function setType(btn) {
   document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
+
 
 // ---------- ANIMATIONS & OBSERVERS ----------
 const fadeObserver = new IntersectionObserver((entries) => {

@@ -227,10 +227,9 @@
 <!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-left">
-    <img src="sunsys-logo.jpeg" alt="SunSys Techsol" class="nav-sunsys" />
+    <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" class="nav-sunsys" />
     <div class="nav-divider"></div>
     <a href="index (2).html" class="nav-logo">
-      <div class="logo-icon">IS</div>
       InternSaathi<span>.com</span>
     </a>
   </div>
@@ -312,7 +311,7 @@
         </div>
         <div class="role-card" data-role="recruiter" onclick="selectRole(this)">
           <div class="role-emoji">🏢</div>
-          <div class="role-name">Recruiter</div>
+          <div class="role-name">Hiring Partners</div>
           <div class="role-desc">Post internships</div>
         </div>
         <div class="role-card" data-role="college" onclick="selectRole(this)">
@@ -377,11 +376,40 @@
         </div>
 
         <!-- Student-specific field -->
-        <div class="field-group" id="college-field">
+        <div class="field-group" id="student-college-field">
           <label class="field-label" for="college">College / University</label>
           <div class="field-wrap">
             <span class="field-icon-left">🏫</span>
             <input class="form-input" id="college" type="text" placeholder="e.g. IIT Bombay, DU, VIT..." />
+          </div>
+        </div>
+
+        <!-- Hiring Partner fields -->
+        <div id="recruiter-fields" style="display:none;">
+          <div class="field-group">
+            <label class="field-label" for="company-name">Company Name</label>
+            <div class="field-wrap">
+              <span class="field-icon-left">🏢</span>
+              <input class="form-input" id="company-name" type="text" placeholder="e.g. Infosys, TCS, Your Startup..." />
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="designation">Your Designation</label>
+            <div class="field-wrap">
+              <span class="field-icon-left">💼</span>
+              <input class="form-input" id="designation" type="text" placeholder="e.g. HR Manager, Founder, CTO..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- College Partner field -->
+        <div id="college-fields" style="display:none;">
+          <div class="field-group">
+            <label class="field-label" for="college-name">College / University Name</label>
+            <div class="field-wrap">
+              <span class="field-icon-left">🏫</span>
+              <input class="form-input" id="college-name" type="text" placeholder="e.g. Anna University, BITS Pilani..." />
+            </div>
           </div>
         </div>
 
@@ -449,9 +477,16 @@
     document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     selectedRole = card.dataset.role;
-    // Show/hide college field
-    const cf = document.getElementById('college-field');
-    cf.style.display = selectedRole === 'student' ? 'block' : 'none';
+
+    // Hide all role-specific fields first
+    document.getElementById('student-college-field').style.display = 'none';
+    document.getElementById('recruiter-fields').style.display     = 'none';
+    document.getElementById('college-fields').style.display       = 'none';
+
+    // Show fields relevant to the selected role
+    if (selectedRole === 'student')   document.getElementById('student-college-field').style.display = 'block';
+    if (selectedRole === 'recruiter') document.getElementById('recruiter-fields').style.display      = 'block';
+    if (selectedRole === 'college')   document.getElementById('college-fields').style.display        = 'block';
   }
 
   // ---- TOAST ----

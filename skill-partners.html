@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Up Partners | InternSaathi</title>
+  <meta name="description" content="InternSaathis official Skill Up Partners - KaushalSathi and Skill Nexgen - empowering students with industry-ready skills." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy: #0B1D3A; --orange: #FF5F1F; --orange-light: #FF7A40; --white: #ffffff; --gray: #F8FAFF; --text: #1F2937; --muted: #6B7280; }
+    body { font-family: "Inter", sans-serif; background: var(--gray); color: var(--text); min-height: 100vh; }
+    .page-header { background: linear-gradient(135deg, var(--navy) 0%, #132244 60%, #1a2f5a 100%); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 68px; box-shadow: 0 2px 20px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; }
+    .header-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    
+    .header-logo-text { font-size: 18px; font-weight: 800; color: #fff; }
+    .back-btn { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .back-btn:hover { background: rgba(255,255,255,0.2); transform: translateX(-3px); }
+    .hero-banner { background: linear-gradient(135deg, var(--navy) 0%, #1a3060 100%); padding: 72px 32px 80px; text-align: center; position: relative; overflow: hidden; }
+    .hero-banner::before { content: ""; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,95,31,0.15) 0%, transparent 70%); border-radius: 50%; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,95,31,0.15); border: 1px solid rgba(255,95,31,0.3); color: #FF8050; padding: 6px 16px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+    .hero-title { font-size: clamp(32px, 5vw, 52px); font-weight: 900; color: #fff; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; position: relative; z-index: 1; }
+    .hero-title span { background: linear-gradient(90deg, var(--orange), #FF9A60); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { font-size: 17px; color: rgba(255,255,255,0.7); max-width: 540px; margin: 0 auto; line-height: 1.7; position: relative; z-index: 1; }
+    .content { max-width: 960px; margin: 0 auto; padding: 64px 24px 80px; }
+    .section-eyebrow { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; }
+    .section-heading { text-align: center; font-size: 28px; font-weight: 800; color: var(--navy); margin-bottom: 48px; }
+    .partners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 32px; }
+    .partner-card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 24px rgba(11,29,58,0.08); border: 1.5px solid #E5E7EB; transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .partner-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(11,29,58,0.14); border-color: var(--orange); }
+    .partner-card-top { background: linear-gradient(135deg, #F0F4FF 0%, #E8EFFF 100%); padding: 40px 32px 32px; display: flex; flex-direction: column; align-items: center; gap: 20px; border-bottom: 1px solid #E5E7EB; }
+    .partner-logo-wrap { width: 140px; height: 140px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(11,29,58,0.1); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; text-decoration: none; }
+    .partner-logo-wrap:hover { transform: scale(1.06); box-shadow: 0 8px 32px rgba(255,95,31,0.25); }
+    .partner-logo-wrap img { width: 120px; height: 120px; object-fit: contain; filter: saturate(1.2) brightness(1.05); }
+    .partner-linkedin-badge { display: inline-flex; align-items: center; gap: 6px; background: #0077B5; color: #fff; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .partner-linkedin-badge:hover { background: #005a8b; transform: translateY(-2px); }
+    .partner-linkedin-badge svg { width: 15px; height: 15px; fill: #fff; }
+    .partner-card-body { padding: 28px 32px 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    .partner-name { font-size: 22px; font-weight: 800; color: var(--navy); }
+    .partner-tagline { font-size: 13px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 1px; }
+    .partner-desc { font-size: 15px; color: #4B5563; line-height: 1.75; }
+    .partner-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .partner-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #374151; font-weight: 500; }
+    .partner-features li::before { content: "✦"; color: var(--orange); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+    .partner-visit-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--orange), var(--orange-light)); color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; margin-top: auto; width: fit-content; transition: transform 0.2s, box-shadow 0.2s; }
+    .partner-visit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,95,31,0.35); }
+    .footer-note { text-align: center; margin-top: 64px; padding: 28px 24px; background: #fff; border-radius: 16px; border: 1.5px solid #E5E7EB; font-size: 14px; color: var(--muted); }
+    .footer-note strong { color: var(--navy); }
+    @media (max-width: 600px) { .partners-grid { grid-template-columns: 1fr; } .hero-banner { padding: 52px 20px 60px; } }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index (2).html" class="header-logo">
+      <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" style="height:44px;width:auto;object-fit:contain;" />
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.2);"></div>
+      <span class="header-logo-text">InternSaathi<span style="color:#FF5F1F;">.com</span></span>
+    </a>
+    <a href="index (2).html" class="back-btn">&#8592; Back to Home</a>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-badge">&#129309; Official Partners</div>
+    <h1 class="hero-title">Our <span>Skill Up</span> Partners</h1>
+    <p class="hero-subtitle">We collaborate with the best skill-building platforms to ensure every InternSaathi student is industry-ready before they even step into their first internship.</p>
+  </section>
+
+  <main class="content">
+    <p class="section-eyebrow">Trusted by 10,000+ students</p>
+    <h2 class="section-heading">Meet Our Partners</h2>
+
+    <div class="partners-grid">
+
+      <div class="partner-card">
+        <div class="partner-card-top">
+          <a href="https://www.linkedin.com/company/kaushalsaathi/" target="_blank" rel="noopener noreferrer" class="partner-logo-wrap" title="Visit KaushalSathi on LinkedIn">
+            <img src="kaushalsaathi-logo.png" alt="KaushalSathi Logo" />
+          </a>
+          <a href="https://www.linkedin.com/company/kaushalsaathi/" target="_blank" rel="noopener noreferrer" class="partner-linkedin-badge">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452H17.21v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.985V9h3.102v1.561h.046c.432-.817 1.487-1.678 3.061-1.678 3.274 0 3.878 2.156 3.878 4.958l-.001 6.611zM5.337 7.433a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zm1.558 13.019H3.78V9h3.115v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            View on LinkedIn
+          </a>
+        </div>
+        <div class="partner-card-body">
+          <div>
+            <p class="partner-tagline">Skill Development Platform</p>
+            <h3 class="partner-name">KaushalSathi</h3>
+          </div>
+          <p class="partner-desc">KaushalSathi is a dedicated skill development platform bridging the gap between academic learning and industry expectations. They provide structured, hands-on training programs designed to make students job-ready with practical skills employers actually look for.</p>
+          <ul class="partner-features">
+            <li>Industry-aligned skill development courses</li>
+            <li>Hands-on project-based learning</li>
+            <li>Mentorship from working professionals</li>
+            <li>Certification recognized by top recruiters</li>
+          </ul>
+          <a href="https://www.kaushalsaathi.com/home" target="_blank" rel="noopener noreferrer" class="partner-visit-btn">Visit KaushalSathi &#8594;</a>
+        </div>
+      </div>
+
+      <div class="partner-card">
+        <div class="partner-card-top">
+          <a href="https://www.linkedin.com/company/skillnexgen/" target="_blank" rel="noopener noreferrer" class="partner-logo-wrap" title="Visit Skill Nexgen on LinkedIn">
+            <img src="skillnexgen-logo.jpg" alt="Skill Nexgen Logo" />
+          </a>
+          <a href="https://www.linkedin.com/company/skillnexgen/" target="_blank" rel="noopener noreferrer" class="partner-linkedin-badge">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452H17.21v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.985V9h3.102v1.561h.046c.432-.817 1.487-1.678 3.061-1.678 3.274 0 3.878 2.156 3.878 4.958l-.001 6.611zM5.337 7.433a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zm1.558 13.019H3.78V9h3.115v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            View on LinkedIn
+          </a>
+        </div>
+        <div class="partner-card-body">
+          <div>
+            <p class="partner-tagline">Next-Gen Learning &amp; Upskilling</p>
+            <h3 class="partner-name">Skill Nexgen</h3>
+          </div>
+          <p class="partner-desc">Skill Nexgen is a next-generation upskilling platform focused on equipping students and young professionals with future-ready competencies. Through innovative learning pathways and real-world simulations, they prepare learners for the evolving demands of modern industries.</p>
+          <ul class="partner-features">
+            <li>Future-ready technology &amp; soft skill training</li>
+            <li>Real-world simulations and case studies</li>
+            <li>Personalized learning paths for every student</li>
+            <li>Career support and placement assistance</li>
+          </ul>
+          <a href="http://www.skillnexgen.com/" target="_blank" rel="noopener noreferrer" class="partner-visit-btn">Visit Skill Nexgen &#8594;</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-note">
+      <strong>Want to partner with InternSaathi?</strong> We are always looking to collaborate with organizations that share our vision of empowering students. Reach out to us at <strong>contact@internsaathi.com</strong>
+    </div>
+  </main>
+
+</body>
+</html>
+
+
+

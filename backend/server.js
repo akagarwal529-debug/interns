@@ -18,6 +18,19 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Serve frontend static files (from the parent directory where HTML files are)
+app.use(express.static(path.join(__dirname, '..')));
+
+// Default to index (2).html for the root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index (2).html'));
+});
+
+// Serve about-us without .html extension
+app.get('/about-us', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'about-us.html'));
+});
+
 // ── API Routes ───────────────────────────────────────────
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/internships',   require('./routes/internships'));

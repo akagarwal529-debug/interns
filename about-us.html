@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us – InternSaathi.com | The Next-Gen Career Revolution</title>
+  <meta name="description" content="Learn about InternSaathi – The Next-Gen Career Revolution powered by Sunsys Techsol Pvt. Ltd." />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0B1D3A;
+      --navy-light: #132244;
+      --orange:  #FF5F1F;
+      --orange-hover: #E54E0E;
+      --green:   #22C55E;
+      --green-bg: #ECFDF5;
+      --blue-accent: #2563EB;
+      --text:    #0F172A;
+      --muted:   #6B7280;
+      --border:  #E5E7EB;
+      --bg-light: #F9FAFB;
+      --bg-white: #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-white); color: var(--text); overflow-x: hidden; }
+
+    /* ─── SCROLLBAR ────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* ─── NAVBAR ───────────────────────────────────── */
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(229,231,235,0.8);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-brand img { height: 46px; width: auto; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; font-size: 14px; font-weight: 500; color: #374151;
+      transition: color 0.2s; position: relative; padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 2px; background: var(--orange);
+      transition: width 0.25s ease; border-radius: 2px;
+    }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+    .nav-play {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid var(--orange); color: var(--orange);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer; transition: all 0.25s;
+    }
+    .nav-play:hover { background: var(--orange); color: #fff; transform: scale(1.08); }
+    .nav-actions { display: flex; gap: 10px; }
+    .btn-login {
+      padding: 8px 22px; border: 1.5px solid var(--border); color: var(--navy);
+      border-radius: 8px; font-size: 13.5px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-login:hover { border-color: var(--navy); background: var(--bg-light); }
+    .btn-register {
+      padding: 8px 22px; background: var(--orange); color: #fff;
+      border-radius: 8px; font-size: 13.5px; font-weight: 700;
+      text-decoration: none; transition: all 0.2s; border: 1.5px solid var(--orange);
+      box-shadow: 0 4px 12px rgba(255,95,31,0.2);
+    }
+    .btn-register:hover { background: var(--orange-hover); border-color: var(--orange-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(255,95,31,0.3); }
+
+    /* ─── HERO ─────────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden; text-align: center;
+      padding: 100px 24px 80px;
+      background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 50%, rgba(255,95,31,0.04) 100%);
+    }
+    /* Floating orbs */
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb-1 { width: 400px; height: 400px; background: #FF5F1F; top: -120px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 300px; height: 300px; background: #22C55E; top: -60px; right: -80px; animation-delay: -3s; }
+    .orb-3 { width: 250px; height: 250px; background: #2563EB; bottom: -80px; left: 30%; animation-delay: -5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, rgba(255,95,31,0.08), rgba(34,197,94,0.08));
+      border: 1px solid rgba(255,95,31,0.2);
+      border-radius: 999px; padding: 7px 20px;
+      font-size: 13px; font-weight: 600; color: var(--orange);
+      margin-bottom: 28px; backdrop-filter: blur(8px);
+      animation: fadeDown 0.6s ease both;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 68px); font-weight: 900;
+      line-height: 1.1; margin-bottom: 22px;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a4a8a 50%, var(--orange) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero p {
+      font-size: 17px; color: var(--muted); max-width: 620px;
+      margin: 0 auto 0; line-height: 1.8;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero p a { color: var(--blue-accent); font-weight: 700; text-decoration: none; border-bottom: 1.5px solid var(--blue-accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── BIG PLAY BUTTON ───────────────────────────── */
+    .hero-play-btn {
+      position: relative; width: 84px; height: 84px;
+      border-radius: 50%; background: #FF0000;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(255,0,0,0.45);
+      transition: transform 0.25s, box-shadow 0.25s;
+      margin-top: 40px; cursor: pointer; text-decoration: none;
+      animation: fadeUp 0.7s ease 0.35s both;
+    }
+    .hero-play-btn::before, .hero-play-btn::after {
+      content: ''; position: absolute; border-radius: 50%;
+      background: rgba(255,0,0,0.35);
+      animation: ripple 2s ease-out infinite;
+    }
+    .hero-play-btn::before { width: 100%; height: 100%; animation-delay: 0s; }
+    .hero-play-btn::after  { width: 100%; height: 100%; animation-delay: 0.6s; }
+    @keyframes ripple {
+      0%   { transform: scale(1);   opacity: 0.7; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .hero-play-btn svg { position: relative; z-index: 1; margin-left: 6px; }
+    .hero-play-btn:hover { transform: scale(1.1); box-shadow: 0 14px 44px rgba(255,0,0,0.55); }
+
+    /* ─── SECTION COMMON ───────────────────────────── */
+    .section { padding: 80px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--orange); background: rgba(255,95,31,0.1);
+      padding: 5px 14px; border-radius: 999px; margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 40px); font-weight: 900;
+      color: var(--navy); line-height: 1.2; margin-bottom: 12px;
+    }
+    .section-sub { font-size: 16px; color: var(--muted); line-height: 1.8; max-width: 580px; }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin: 0 auto; }
+
+    /* ─── INNOVATORS ───────────────────────────────── */
+    .innovators { background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%); padding: 80px 24px; }
+    .innovators-grid {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 24px; max-width: 1100px; margin: 52px auto 0;
+    }
+    .innovator-card {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 24px; padding: 36px 20px;
+      text-align: center; width: 245px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+      transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+      cursor: default;
+    }
+    .innovator-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.13);
+    }
+    .avatar-circle {
+      width: 124px; height: 124px; border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 38px; font-weight: 900; color: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      position: relative;
+    }
+    .avatar-circle::after {
+      content: ''; position: absolute; inset: -4px;
+      border-radius: 50%; z-index: -1; opacity: 0.3;
+      background: inherit; filter: blur(10px);
+    }
+    .avatar-circle img {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    }
+    .innovator-card h4 {
+      font-size: 16px; font-weight: 800; color: var(--navy);
+      margin-bottom: 6px; line-height: 1.4;
+    }
+    .innovator-card p { font-size: 13px; color: var(--blue-accent); font-weight: 600; }
+
+    /* ─── FROM INTERNSHIP TO NAUKRI ────────────────── */
+    .ftn { background: var(--bg-white); padding: 80px 24px; }
+    .ftn-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 28px; max-width: 960px; margin: 52px auto 28px;
+    }
+    .ftn-card {
+      background: #fff; border-radius: 24px; padding: 36px 32px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .ftn-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    }
+    .ftn-card.orange-card::before { background: linear-gradient(90deg, var(--orange), #ff8c5a); }
+    .ftn-card.teal-card::before { background: linear-gradient(90deg, var(--green), #38ef7d); }
+    .ftn-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.10); }
+    .ftn-card h3 {
+      font-size: 16.5px; font-weight: 800; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ftn-card h3.orange { color: var(--orange); }
+    .ftn-card h3.teal   { color: var(--green); }
+    .ftn-card p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 20px; }
+    .ftn-card p strong { color: var(--text); font-weight: 700; }
+    .ftn-features {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      border-top: 1px solid var(--border); padding-top: 16px;
+    }
+    .ftn-feat-pill {
+      font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px;
+    }
+    .orange-card .ftn-feat-pill { background: rgba(255,95,31,0.1); color: var(--orange); }
+    .teal-card   .ftn-feat-pill { background: var(--green-bg); color: var(--green); }
+    .ftn-powered {
+      text-align: center; font-size: 13.5px; color: var(--muted);
+      max-width: 960px; margin: 0 auto;
+      padding: 18px 24px; border-radius: 14px;
+      background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15);
+    }
+    .ftn-powered a { color: var(--blue-accent); font-weight: 700; text-decoration: none; }
+
+    /* ─── CAMPUS AMBASSADORS ───────────────────────── */
+    .ambassadors {
+      background: linear-gradient(135deg, var(--bg-light) 0%, #f0faf7 100%);
+      padding: 80px 24px; text-align: center;
+    }
+    .amb-poster-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 52px auto 0;
+    }
+    .amb-poster {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+      aspect-ratio: 4/5;
+    }
+    .amb-poster:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(255,95,31,0.18);
+    }
+    .amb-poster img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    @media (max-width: 900px) { .amb-poster-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 500px) { .amb-poster-grid { grid-template-columns: 1fr; } }
+
+
+    /* ─── DISCLAIMER ───────────────────────────────── */
+    .disclaimer { background: var(--bg-white); padding: 60px 24px; }
+    .disclaimer-inner {
+      max-width: 880px; margin: 0 auto;
+      background: #fff; border-radius: 24px;
+      padding: 40px 44px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    }
+    .disc-title {
+      text-align: center; font-size: 16px; font-weight: 800;
+      color: var(--navy); margin-bottom: 28px; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+    .disc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px 32px; margin-bottom: 36px; }
+    .disc-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+      padding: 12px; border-radius: 12px;
+      background: var(--bg-light); border: 1px solid rgba(0,0,0,0.05);
+    }
+    .disc-item strong { color: var(--text); display: block; font-size: 12.5px; margin-bottom: 2px; }
+    .disc-emoji { font-size: 20px; flex-shrink: 0; }
+
+    /* ─── SOCIAL ───────────────────────────────────── */
+    .social-row { text-align: center; border-top: 1px solid var(--border); padding-top: 28px; }
+    .social-row p { font-size: 14px; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
+    .social-icons { display: flex; justify-content: center; gap: 14px; }
+    .social-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: #fff;
+      transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    .social-icon:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 10px 24px rgba(0,0,0,0.2); }
+    .social-icon.linkedin { background: #0A66C2; }
+    .social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .social-icon.twitter   { background: #000; }
+
+    /* ─── FOOTER ───────────────────────────────────── */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.55);
+      text-align: center; padding: 28px 24px; font-size: 13px;
+    }
+    footer a { color: var(--orange); text-decoration: none; font-weight: 600; }
+
+    /* ─── FADE-IN ON SCROLL ────────────────────────── */
+    .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ───────────────────────────────── */
+    @media (max-width: 900px) {
+      .ftn-grid { grid-template-columns: 1fr; }
+      .amb-grid { grid-template-columns: repeat(2,1fr); }
+      .disc-grid { grid-template-columns: 1fr 1fr; }
+      .navbar { padding: 0 24px; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .amb-grid { grid-template-columns: 1fr 1fr; }
+      .disc-grid { grid-template-columns: 1fr; }
+      .disclaimer-inner { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ──────────────────────────────────────────── -->
+<header class="navbar">
+  <a href="index (2).html" class="nav-brand">
+    <img src="internsaathi-logo.jpeg" alt="InternSaathi" />
+  </a>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index (2).html">Explore Internships</a></li>
+      <li><a href="about-us.html" class="active">About Us</a></li>
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </nav>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="https://www.youtube.com/shorts/JpCDJmvy81c" target="_blank" rel="noopener noreferrer" class="nav-play" title="Watch our video">
+      <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><path d="M1 1l10 6L1 13V1z"/></svg>
+    </a>
+    <div class="nav-actions">
+      <a href="signin.html" class="btn-login">Login</a>
+      <a href="register.html" class="btn-register">Register</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">🇮🇳 &nbsp;Powered by Sunsys Techsol Pvt. Ltd.</div>
+    <h1>The Next-Gen<br/>Career Revolution</h1>
+    <p>Driven by <a href="https://sunsystechsol.com" target="_blank">Sunsys Techsol Pvt. Ltd.</a>, we're crafting an ecosystem that empowers students, elevates institutions, and connects organizations with future leaders.</p>
+  </div>
+</section>
+
+<!-- ── THE INNOVATORS ──────────────────────────────────── -->
+<section class="innovators">
+  <div class="container text-center reveal">
+    <div class="section-label">✨ The Visionaries</div>
+    <h2 class="section-title">The Innovators</h2>
+    <p class="section-sub">The brilliant minds driving InternSaathi's mission to revolutionize how India builds careers.</p>
+  </div>
+  <div class="innovators-grid">
+
+    <div class="innovator-card reveal">
+      <div class="avatar-circle" style="background:linear-gradient(135deg,#f7971e,#ffd200)">
+        <img src="abhirash.jpg" alt="Mr. Abhirash Garg" />
+      </div>
+      <h4>Mr. Abhirash Garg</h4>
+      <p>(ABES Engineering College)</p>
+    </div>
+
+    <div class="innovator-card reveal">
+      <div class="avatar-circle" style="background:linear-gradient(135deg,#0B1F3A,#2a6496)">
+        <img src="gautam.png" alt="Mr. Gautam Tanwar" />
+      </div>
+      <h4>Mr. Gautam Tanwar</h4>
+      <p>(IIT Bombay • Ex-Infosys)</p>
+    </div>
+
+    <div class="innovator-card reveal">
+      <div class="avatar-circle" style="background:linear-gradient(135deg,#6c63ff,#a89cff)">
+        <img src="darshvir.jpg" alt="Mr. Darshvir Singh Batth" />
+      </div>
+      <h4>Mr. Darshvir Singh Batth</h4>
+      <p>(Birla Institute of Management Technology, Greater Noida)</p>
+    </div>
+
+    <div class="innovator-card reveal">
+      <div class="avatar-circle" style="background:linear-gradient(135deg,#FF5F1F,#ff8c5a)">
+        <img src="ayush.png" alt="Mr. Ayush Kumar Agarwal" />
+      </div>
+      <h4>Mr. Ayush Kumar Agarwal</h4>
+      <p>(Manipal University Jaipur)</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FROM INTERNSHIP TO NAUKRI ───────────────────────── -->
+<section class="ftn">
+  <div class="container text-center reveal">
+    <div class="section-label">🚀 Our Ecosystem</div>
+    <h2 class="section-title">From Internship to Naukri</h2>
+    <p class="section-sub">Two powerful platforms, one mission — making every career journey seamless from day one.</p>
+  </div>
+
+  <div class="ftn-grid">
+    <div class="ftn-card orange-card reveal">
+      <h3 class="orange">💼 InternSaathi — Your Ultimate Start</h3>
+      <p>
+        <strong>InternSaathi</strong> is where every college student begins their journey from classroom to corporate. Guided by <strong>Mr. Gautam Tanwar (Ex-Infosys, MBA – IIT Bombay)</strong> and <strong>Mr. Ashwani Garg, CHRO, Sunsys Techsol Pvt. Ltd.</strong>, it connects learners to verified internships, real mentorship, and direct PPO pathways — turning ambition into opportunity.
+      </p>
+      <div class="ftn-features">
+        <span class="ftn-feat-pill">🌱 Verified internships</span>
+        <span class="ftn-feat-pill">⚡ Smart-matching process</span>
+        <span class="ftn-feat-pill">🚀 PPO-ready experiences</span>
+      </div>
+    </div>
+
+    <div class="ftn-card teal-card reveal">
+      <h3 class="teal">💰 NaukriSaathi — The Career Launchpad</h3>
+      <p>
+        <strong>NaukriSaathi</strong> helps students and graduates move from learning to earning. Backed by <strong>IIT-IIM mentors</strong> and expert guidance from industry leaders, it bridges the gap between internship experience and employment — empowering every learner to become career-ready.
+      </p>
+      <div class="ftn-features">
+        <span class="ftn-feat-pill">💼 Verified jobs</span>
+        <span class="ftn-feat-pill">🎯 Interview training</span>
+        <span class="ftn-feat-pill">💻 Zero-cost access for all</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ftn-powered reveal">
+    ✨ Powered by <a href="https://sunsystechsol.com" target="_blank">Sunsys Techsol Pvt. Ltd.</a> — enabling seamless career journeys through innovation, guidance, and mentorship.
+  </div>
+</section>
+
+<!-- ── CAMPUS AMBASSADORS ───────────────────────────────── -->
+<section class="ambassadors">
+  <div class="container text-center reveal">
+    <div class="section-label">🎓 Our Community</div>
+    <h2 class="section-title">Meet Our Campus Ambassadors</h2>
+    <p class="section-sub">Passionate students representing InternSaathi at campuses across India.</p>
+  </div>
+
+  <div class="amb-poster-grid">
+    <div class="amb-poster reveal">
+      <img src="ambassador-abhishek.jpg" alt="Abhishek Ghosh - Campus Ambassador" />
+    </div>
+    <div class="amb-poster reveal">
+      <img src="ambassador-srijoni.jpg" alt="Srijoni Ganguly - Campus Ambassador" />
+    </div>
+    <div class="amb-poster reveal">
+      <img src="ambassador-nandini.jpg" alt="Nandini Dhomne - Campus Ambassador" />
+    </div>
+    <div class="amb-poster reveal">
+      <img src="ambassador-hemanth.jpg" alt="Hemanthkumar R Rottigawad - Campus Ambassador" />
+    </div>
+  </div>
+</section>
+
+<!-- ── DISCLAIMER ───────────────────────────────────────── -->
+<section class="disclaimer">
+  <div class="disclaimer-inner reveal">
+    <div class="disc-title">📋 Disclaimer – InternSaathi</div>
+    <div class="disc-grid">
+      <div class="disc-item"><span class="disc-emoji">🔴</span><div><strong>Platform Role</strong>A connecting platform, not an employer.</div></div>
+      <div class="disc-item"><span class="disc-emoji">💼</span><div><strong>User Responsibility</strong>Users must verify all details.</div></div>
+      <div class="disc-item"><span class="disc-emoji">❌</span><div><strong>No Guarantee</strong>We do not guarantee any outcomes.</div></div>
+      <div class="disc-item"><span class="disc-emoji">🔵</span><div><strong>Liability</strong>Not responsible for contracts or disputes.</div></div>
+      <div class="disc-item"><span class="disc-emoji">🔒</span><div><strong>Safety First</strong>Share personal details with caution.</div></div>
+      <div class="disc-item"><span class="disc-emoji">🚫</span><div><strong>No Misuse</strong>Fraud may lead to account suspension.</div></div>
+    </div>
+
+    <div class="social-row">
+      <p>Follow us on</p>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/company/internsaathi" target="_blank" class="social-icon linkedin">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/intern.saathi" target="_blank" class="social-icon instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://twitter.com/internsaathi" target="_blank" class="social-icon twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ───────────────────────────────────────────── -->
+<footer>
+  <p>© 2025 InternSaathi.com · All rights reserved · Powered by <a href="https://sunsystechsol.com" target="_blank">SunSys Techsol</a></p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
