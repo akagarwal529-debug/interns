@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post an Internship - InternSaathi</title>
+  <meta name="description" content="Post a free internship on InternSaathi and connect with thousands of talented students across India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy:#0B1D3A; --orange:#FF5F1F; --border:#E5E7EB; --text:#1F2937; --light:#6B7280; --bg:#F9FAFB; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    .navbar { background:var(--navy); padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.3); }
+    .nav-brand { display:flex; align-items:center; gap:12px; text-decoration:none; }
+    .nav-brand img { height:40px; width:auto; object-fit:contain; border-radius:6px; }
+    .nav-brand-text { font-size:20px; font-weight:800; color:#fff; }
+    .nav-brand-text span { color:var(--orange); }
+    .nav-back { display:inline-flex; align-items:center; gap:6px; padding:8px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.8); font-size:13px; font-weight:600; text-decoration:none; transition:all 0.2s; }
+    .nav-back:hover { background:rgba(255,255,255,0.1); color:#fff; }
+    .page-hero { background:linear-gradient(135deg,var(--navy) 0%,#0f2a50 60%,#1a3a6e 100%); padding:60px 24px 70px; text-align:center; position:relative; overflow:hidden; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 60% 0%,rgba(255,95,31,0.12) 0%,transparent 60%); pointer-events:none; }
+    .page-hero h1 { font-size:clamp(26px,4vw,44px); font-weight:900; color:#fff; margin-bottom:12px; position:relative; }
+    .page-hero h1 span { color:var(--orange); }
+    .page-hero p { font-size:16px; color:rgba(255,255,255,0.6); max-width:500px; margin:0 auto; position:relative; }
+    .hero-badges { display:flex; justify-content:center; gap:12px; margin-top:20px; flex-wrap:wrap; position:relative; }
+    .hbadge { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:30px; padding:6px 14px; font-size:12px; font-weight:600; color:rgba(255,255,255,0.75); }
+    .form-wrapper { max-width:760px; margin:-36px auto 60px; padding:0 20px; position:relative; z-index:2; }
+    .form-card { background:#fff; border-radius:20px; box-shadow:0 20px 60px rgba(11,29,58,0.12); overflow:hidden; }
+    .form-section { padding:30px 34px; border-bottom:1px solid var(--border); }
+    .sec-head { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+    .sec-icon { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--orange),#FF9A60); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+    .sec-head h3 { font-size:16px; font-weight:800; color:var(--navy); }
+    .sec-head p { font-size:12px; color:var(--light); }
+    .fg { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .fgroup { display:flex; flex-direction:column; gap:6px; }
+    .fgroup.full { grid-column:1/-1; }
+    label { font-size:13px; font-weight:600; color:var(--navy); }
+    label .req { color:var(--orange); margin-left:2px; }
+    input,select,textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-family:inherit; font-size:14px; color:var(--text); background:#fff; transition:border-color 0.2s,box-shadow 0.2s; outline:none; }
+    input:focus,select:focus,textarea:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,95,31,0.1); }
+    textarea { resize:vertical; min-height:100px; line-height:1.6; }
+    .hint { font-size:11px; color:var(--light); }
+    .toggle-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .tgl { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .tgl input { opacity:0; width:0; height:0; }
+    .tslider { position:absolute; inset:0; background:#D1D5DB; border-radius:22px; cursor:pointer; transition:0.3s; }
+    .tslider::before { content:''; position:absolute; height:16px; width:16px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:0.3s; }
+    .tgl input:checked + .tslider { background:var(--orange); }
+    .tgl input:checked + .tslider::before { transform:translateX(18px); }
+    .toggle-label { font-size:13px; font-weight:600; color:var(--navy); }
+    .submit-area { padding:26px 34px; background:linear-gradient(135deg,#F9FAFB,#F3F4F6); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .snote { font-size:12px; color:var(--light); display:flex; align-items:center; gap:6px; }
+    .btn-submit { display:inline-flex; align-items:center; gap:8px; padding:14px 36px; background:linear-gradient(135deg,var(--orange),#FF7A3D); color:#fff; font-size:15px; font-weight:700; border:none; border-radius:12px; cursor:pointer; transition:all 0.3s cubic-bezier(.34,1.56,.64,1); box-shadow:0 6px 24px rgba(255,95,31,0.3); }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(255,95,31,0.4); }
+    .success-box { display:none; padding:60px 34px; text-align:center; }
+    .succ-icon { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#10B981,#059669); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; animation:pop 0.5s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
+    .success-box h2 { font-size:24px; font-weight:800; color:var(--navy); margin-bottom:8px; }
+    .success-box p { color:var(--light); margin-bottom:24px; }
+    .btn-home { display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:var(--navy); color:#fff; font-weight:700; font-size:14px; border-radius:10px; text-decoration:none; }
+    .btn-home:hover { background:#0f2a50; }
+    .page-footer { text-align:center; padding:24px; font-size:12px; color:var(--light); border-top:1px solid var(--border); }
+    @media(max-width:600px){ .fg{grid-template-columns:1fr} .form-section{padding:22px 18px} .submit-area{flex-direction:column;align-items:stretch} .btn-submit{justify-content:center} }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index (2).html" class="nav-brand">
+    <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" />
+    <span class="nav-brand-text">InternSaathi<span>.com</span></span>
+  </a>
+  <a href="index (2).html" class="nav-back">&#8592; Back to Home</a>
+</nav>
+
+<div class="page-hero">
+  <h1>Post an <span>Internship</span> &#8212; 100% Free</h1>
+  <p>Reach thousands of talented students from top colleges across India.</p>
+  <div class="hero-badges">
+    <span class="hbadge">&#10003; Free Forever</span>
+    <span class="hbadge">&#127891; 5,000+ Students</span>
+    <span class="hbadge">&#127979; 150+ College Partners</span>
+    <span class="hbadge">&#9889; Live in Minutes</span>
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <div class="form-card" id="form-card">
+
+    <div class="form-section">
+      <div class="sec-head"><div class="sec-icon">&#127970;</div><div><h3>Company Details</h3><p>Tell students about your organisation</p></div></div>
+      <div class="fg">
+        <div class="fgroup"><label>Company Name <span class="req">*</span></label><input type="text" id="companyName" placeholder="e.g. Acme Technologies Pvt. Ltd." required /></div>
+        <div class="fgroup"><label>Industry <span class="req">*</span></label>
+          <select id="industry" required><option value="">Select industry</option><option>Technology / IT</option><option>Marketing / Advertising</option><option>Finance / Fintech</option><option>HR / Recruitment</option><option>E-commerce / Retail</option><option>Healthcare</option><option>Education / EdTech</option><option>Media / Content</option><option>Consulting</option><option>Other</option></select>
+        </div>
+        <div class="fgroup"><label>Company Website</label><input type="url" id="website" placeholder="https://yourcompany.com" /></div>
+        <div class="fgroup"><label>Recruiter Name <span class="req">*</span></label><input type="text" id="recruiterName" placeholder="Your full name" required /></div>
+        <div class="fgroup"><label>Official Email <span class="req">*</span></label><input type="email" id="email" placeholder="recruiter@company.com" required /></div>
+        <div class="fgroup"><label>Phone Number</label><input type="tel" id="phone" placeholder="+91 9876543210" /></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="sec-head"><div class="sec-icon">&#128188;</div><div><h3>Internship Details</h3><p>Describe the role and expectations</p></div></div>
+      <div class="fg">
+        <div class="fgroup full"><label>Internship Title <span class="req">*</span></label><input type="text" id="title" placeholder="e.g. Marketing Intern, Frontend Developer Intern" required /></div>
+        <div class="fgroup"><label>Work Mode <span class="req">*</span></label><select id="workMode" required><option value="">Select mode</option><option>Remote</option><option>On-site</option><option>Hybrid</option></select></div>
+        <div class="fgroup"><label>Location</label><input type="text" id="location" placeholder="e.g. Bengaluru, Mumbai or Remote" /></div>
+        <div class="fgroup"><label>Duration <span class="req">*</span></label><select id="duration" required><option value="">Select duration</option><option>1 Month</option><option>2 Months</option><option>3 Months</option><option>4 Months</option><option>6 Months</option><option>Other</option></select></div>
+        <div class="fgroup"><label>Openings <span class="req">*</span></label><input type="number" id="openings" min="1" placeholder="e.g. 5" required /></div>
+        <div class="fgroup"><label>Start Date</label><input type="date" id="startDate" /></div>
+        <div class="fgroup full"><label>Internship Description <span class="req">*</span></label><textarea id="description" rows="5" placeholder="Describe the role, day-to-day tasks, what the intern will learn..." required></textarea></div>
+        <div class="fgroup full"><label>Requirements / Skills Needed</label><textarea id="requirements" rows="3" placeholder="e.g. Basic Python, communication skills..."></textarea><span class="hint">Separate with commas or new lines</span></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="sec-head"><div class="sec-icon">&#128176;</div><div><h3>Stipend &amp; Perks</h3><p>What will the intern receive?</p></div></div>
+      <div class="fg">
+        <div class="fgroup full">
+          <div class="toggle-row">
+            <label class="tgl"><input type="checkbox" id="paidToggle" onchange="toggleStipend(this)" /><span class="tslider"></span></label>
+            <span class="toggle-label">This internship offers a stipend</span>
+          </div>
+        </div>
+        <div class="fgroup" id="stipendGroup" style="display:none;"><label>Stipend Amount (&#8377;/month)</label><input type="number" id="stipend" min="0" placeholder="e.g. 5000" /></div>
+        <div class="fgroup full"><label>Perks / Benefits</label><input type="text" id="perks" placeholder="e.g. Certificate, Letter of Recommendation, Pre-Placement Offer" /><span class="hint">Comma-separated</span></div>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <span class="snote">&#128274; Your information is secure and only used to publish this listing.</span>
+      <button class="btn-submit" onclick="submitForm()">&#128640; Post Internship Now</button>
+    </div>
+
+    <div class="success-box" id="success-box">
+      <div class="succ-icon">&#9989;</div>
+      <h2>Internship Posted Successfully!</h2>
+      <p>Our team will review and publish your listing within 24 hours.<br/>We will notify you at the email you provided.</p>
+      <a href="index (2).html" class="btn-home">&#8592; Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer">
+  &copy; 2025 InternSaathi.com &middot; Powered by <strong>SunSys Techsol Pvt. Ltd.</strong>
+</footer>
+
+<script>
+  function toggleStipend(el) {
+    document.getElementById('stipendGroup').style.display = el.checked ? 'block' : 'none';
+  }
+  async function submitForm() {
+    const req = ['companyName','industry','recruiterName','email','title','workMode','duration','openings','description'];
+    for (const id of req) {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.focus();
+        el.style.borderColor = '#EF4444';
+        el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+        setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2000);
+        alert('Please fill in all required fields marked with *');
+        return;
+      }
+    }
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    await new Promise(r => setTimeout(r, 1500));
+    document.querySelectorAll('.form-section,.submit-area').forEach(el => el.style.display='none');
+    document.getElementById('success-box').style.display = 'block';
+  }
+</script>
+</body>
+</html>
