@@ -1,4 +1,4 @@
-﻿// ============================================================
+// ============================================================
 // firebase-config.js — InternSaathi Firebase Configuration
 // ------------------------------------------------------------
 // SETUP STEPS:
@@ -15,12 +15,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPas
 
 // 🔴 REPLACE THESE VALUES WITH YOUR FIREBASE PROJECT CONFIG
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyCQRGE3YyDI0csgkf5-fWwKD6VidJTTcto",
+  authDomain:        "internsaathi-1a85a.firebaseapp.com",
+  projectId:         "internsaathi-1a85a",
+  storageBucket:     "internsaathi-1a85a.firebasestorage.app",
+  messagingSenderId: "1085854699737",
+  appId:             "1:1085854699737:web:d575637e1c4cd375ebeec8",
+  measurementId:     "G-SY7RCYYPD1"
 };
 
 const app      = initializeApp(firebaseConfig);
