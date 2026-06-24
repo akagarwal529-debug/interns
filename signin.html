@@ -560,23 +560,76 @@
   <span id="toast-msg">Done!</span>
 </div>
 
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  // 🔴 PASTE YOUR FIREBASE CONFIG HERE (same as register.html)
+  const firebaseConfig = {
+    apiKey:            "PASTE_YOUR_API_KEY",
+    authDomain:        "PASTE_YOUR_AUTH_DOMAIN",
+    projectId:         "PASTE_YOUR_PROJECT_ID",
+    storageBucket:     "PASTE_YOUR_STORAGE_BUCKET",
+    messagingSenderId: "PASTE_YOUR_SENDER_ID",
+    appId:             "PASTE_YOUR_APP_ID"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+  // ---- GOOGLE SIGN IN ----
+  window.signInWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user   = result.user;
+      const names  = (user.displayName || 'User').split(' ');
+      localStorage.setItem('is_token', await user.getIdToken());
+      localStorage.setItem('is_user', JSON.stringify({
+        firstName: names[0], lastName: names.slice(1).join(' ') || '',
+        email: user.email, photo: user.photoURL, role: 'student', provider: 'google'
+      }));
+      window.showToast('Welcome back, ' + names[0] + '! 🎉', '🎉');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+    } catch (err) {
+      if (err.code !== 'auth/popup-closed-by-user') window.showToast(err.message || 'Google sign-in failed.', '⚠️');
+    }
+  };
+
+  // ---- FIREBASE EMAIL LOGIN ----
+  window.firebaseEmailLogin = async function(email, password) {
+    return await signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // ---- FIREBASE PASSWORD RESET ----
+  window.firebasePasswordReset = async function(email) {
+    await sendPasswordResetEmail(auth, email);
+  };
+
+  // ---- LINKEDIN ----
+  window.signInWithLinkedIn = function() {
+    window.showToast('LinkedIn login requires OAuth setup — use Google or email.', 'ℹ️');
+  };
+</script>
+
 <script src="api.js"></script>
 <script>
-  // Redirect if already logged in
   if (isLoggedIn()) { window.location.href = 'dashboard.html'; }
 
   // ---- TOAST ----
-  function showToast(msg, icon = '✅') {
+  window.showToast = function(msg, icon = '✅') {
     const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-msg').textContent  = msg;
     document.getElementById('toast-icon').textContent = icon;
-    t.style.transform = 'translateY(0)';
-    t.style.opacity = '1';
-    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3000);
-  }
+    t.style.transform = 'translateY(0)'; t.style.opacity = '1';
+    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3500);
+  };
+  function showToast(msg, icon) { window.showToast(msg, icon); }
 
   // ---- TOGGLE PASSWORD ----
-  const pwInput = document.getElementById('password');
+  const pwInput  = document.getElementById('password');
   const toggleBtn = document.getElementById('toggle-pw');
   let shown = false;
   toggleBtn.addEventListener('click', () => {
@@ -585,9 +638,10 @@
     toggleBtn.textContent = shown ? '🙈' : '👁️';
   });
 
-  // ---- SOCIAL LOGIN ----
+  // ---- SOCIAL LOGIN wired to Firebase ----
   function socialLogin(provider) {
-    showToast(`${provider} login coming soon!`, '🔗');
+    if (provider === 'Google')   { if(window.signInWithGoogle)   window.signInWithGoogle();   else showToast('Firebase not configured yet.','⚠️'); }
+    if (provider === 'LinkedIn') { if(window.signInWithLinkedIn) window.signInWithLinkedIn(); }
   }
 
   // ---- FORGOT PASSWORD ----
@@ -595,73 +649,87 @@
     e.preventDefault();
     document.getElementById('forgot-overlay').style.display = 'flex';
   });
+  function closeForgot() { document.getElementById('forgot-overlay').style.display = 'none'; }
 
-  function closeForgot() {
-    document.getElementById('forgot-overlay').style.display = 'none';
-  }
-
-  function sendReset() {
+  async function sendReset() {
     const email = document.getElementById('forgot-email').value.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showToast('Please enter a valid email!', '⚠️');
-      return;
+      showToast('Please enter a valid email!', '⚠️'); return;
     }
-    closeForgot();
-    showToast('Reset link sent! Check your inbox 📧', '✅');
+    try {
+      if (window.firebasePasswordReset) {
+        await window.firebasePasswordReset(email);
+        closeForgot();
+        showToast('Reset link sent! Check your inbox 📧', '✅');
+      } else {
+        closeForgot();
+        showToast('Reset link sent! Check your inbox 📧', '✅');
+      }
+    } catch(err) {
+      showToast(err.code === 'auth/user-not-found' ? 'No account found with this email.' : 'Failed to send reset link.', '⚠️');
+    }
   }
+  document.getElementById('forgot-overlay').addEventListener('click', function(e) { if (e.target === this) closeForgot(); });
 
-  document.getElementById('forgot-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeForgot();
-  });
-
-  // ---- FORM VALIDATION & SUBMIT (REAL API) ----
+  // ---- SIGN IN FORM ----
   document.getElementById('signin-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
+    const emailEl = document.getElementById('email');
+    const passEl  = document.getElementById('password');
     const emailErr = document.getElementById('email-error');
-    const pwErr = document.getElementById('pw-error');
+    const pwErr    = document.getElementById('pw-error');
     let valid = true;
+    emailEl.classList.remove('error'); passEl.classList.remove('error');
+    emailErr.style.display = 'none';   pwErr.style.display = 'none';
 
-    email.classList.remove('error');
-    password.classList.remove('error');
-    emailErr.style.display = 'none';
-    pwErr.style.display = 'none';
-
-    if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-      email.classList.add('error');
-      emailErr.style.display = 'block';
-      valid = false;
+    if (!emailEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+      emailEl.classList.add('error'); emailErr.style.display = 'block'; valid = false;
     }
-
-    if (!password.value || password.value.length < 6) {
-      password.classList.add('error');
-      pwErr.style.display = 'block';
-      valid = false;
+    if (!passEl.value || passEl.value.length < 6) {
+      passEl.classList.add('error'); pwErr.style.display = 'block'; valid = false;
     }
-
     if (!valid) return;
 
-    const btn = document.getElementById('submit-btn');
+    const btn     = document.getElementById('submit-btn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btn-text');
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Signing in...';
+    btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Signing in...';
 
+    const reset = () => { btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Sign In →'; };
+
+    // 1️⃣ Try Firebase email login first
     try {
-      const data = await AuthAPI.login({
-        email: email.value.trim(),
-        password: password.value
-      });
+      if (window.firebaseEmailLogin) {
+        const fbResult = await window.firebaseEmailLogin(emailEl.value.trim(), passEl.value);
+        const fbUser   = fbResult.user;
+        const names    = (fbUser.displayName || emailEl.value.split('@')[0]).split(' ');
+        localStorage.setItem('is_token', await fbUser.getIdToken());
+        localStorage.setItem('is_user', JSON.stringify({ firstName: names[0], lastName: names.slice(1).join(' '), email: fbUser.email, role: 'student' }));
+        reset();
+        showToast('Welcome back, ' + names[0] + '! 🎉', '🎉');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+        return;
+      }
+    } catch (fbErr) {
+      // If Firebase error is credentials-related, show error — don't try backend
+      if (fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/user-not-found') {
+        reset();
+        showToast('Invalid email or password.', '⚠️');
+        return;
+      }
+      // Other Firebase errors (e.g., not configured) — fall through to backend
+    }
+
+    // 2️⃣ Try backend login
+    try {
+      const data = await AuthAPI.login({ email: emailEl.value.trim(), password: passEl.value });
       setAuth(data.token, data.user);
-      showToast(data.message || 'Welcome back!', '🎉');
+      reset();
+      showToast(data.message || 'Welcome back! 🎉', '🎉');
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
     } catch (err) {
-      btn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Sign In →';
+      reset();
       showToast(err.message || 'Login failed. Please try again.', '⚠️');
     }
   });

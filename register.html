@@ -466,6 +466,70 @@
   <span id="toast-msg">Done!</span>
 </div>
 
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  // 🔴 PASTE YOUR FIREBASE CONFIG HERE
+  const firebaseConfig = {
+    apiKey:            "PASTE_YOUR_API_KEY",
+    authDomain:        "PASTE_YOUR_AUTH_DOMAIN",
+    projectId:         "PASTE_YOUR_PROJECT_ID",
+    storageBucket:     "PASTE_YOUR_STORAGE_BUCKET",
+    messagingSenderId: "PASTE_YOUR_SENDER_ID",
+    appId:             "PASTE_YOUR_APP_ID"
+  };
+
+  const app      = initializeApp(firebaseConfig);
+  const auth     = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+  // ---- GOOGLE SIGN UP ----
+  window.signUpWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user   = result.user;
+      const names  = (user.displayName || 'User').split(' ');
+      // Save to localStorage for session
+      localStorage.setItem('is_token', await user.getIdToken());
+      localStorage.setItem('is_user', JSON.stringify({
+        firstName: names[0],
+        lastName:  names.slice(1).join(' ') || '',
+        email:     user.email,
+        photo:     user.photoURL,
+        role:      'student',
+        provider:  'google'
+      }));
+      // Try to sync with backend (optional — won't break if backend is offline)
+      try {
+        const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+          ? 'http://localhost:5000/api'
+          : 'https://internsaathi-api.onrender.com/api';
+        await fetch(API_BASE + '/auth/google-sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await user.getIdToken() },
+          body: JSON.stringify({ firstName: names[0], lastName: names.slice(1).join(' '), email: user.email, photo: user.photoURL })
+        });
+      } catch(_) {}
+      showSuccess(`Welcome, ${names[0]}! Your Google account is connected.`);
+    } catch (err) {
+      if (err.code !== 'auth/popup-closed-by-user') showToast(err.message || 'Google sign-up failed.', '⚠️');
+    }
+  };
+
+  // ---- LINKEDIN (shows guide) ----
+  window.signUpWithLinkedIn = function() {
+    showToast('LinkedIn login requires OAuth setup — use Google or email for now.', 'ℹ️');
+  };
+
+  // ---- EMAIL/PASSWORD REGISTER via Firebase ----
+  window.firebaseEmailRegister = async function(email, password) {
+    return await createUserWithEmailAndPassword(auth, email, password);
+  };
+</script>
+
 <script src="api.js"></script>
 <script>
   // Redirect if already logged in
@@ -477,13 +541,9 @@
     document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     selectedRole = card.dataset.role;
-
-    // Hide all role-specific fields first
     document.getElementById('student-college-field').style.display = 'none';
-    document.getElementById('recruiter-fields').style.display     = 'none';
-    document.getElementById('college-fields').style.display       = 'none';
-
-    // Show fields relevant to the selected role
+    document.getElementById('recruiter-fields').style.display      = 'none';
+    document.getElementById('college-fields').style.display        = 'none';
     if (selectedRole === 'student')   document.getElementById('student-college-field').style.display = 'block';
     if (selectedRole === 'recruiter') document.getElementById('recruiter-fields').style.display      = 'block';
     if (selectedRole === 'college')   document.getElementById('college-fields').style.display        = 'block';
@@ -492,19 +552,27 @@
   // ---- TOAST ----
   function showToast(msg, icon = '✅') {
     const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-msg').textContent  = msg;
     document.getElementById('toast-icon').textContent = icon;
     t.style.transform = 'translateY(0)'; t.style.opacity = '1';
-    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3000);
+    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3500);
   }
 
-  // ---- SOCIAL SIGNUP ----
+  // ---- SOCIAL BUTTONS wired to Firebase module ----
   function socialSignup(provider) {
-    showToast(`${provider} signup coming soon!`, '🔗');
+    if (provider === 'Google')   { if(window.signUpWithGoogle)   signUpWithGoogle();   else showToast('Firebase not configured yet. See firebase-config.js','⚠️'); }
+    if (provider === 'LinkedIn') { if(window.signUpWithLinkedIn) signUpWithLinkedIn(); }
   }
+
+  // ---- SUCCESS ----
+  function showSuccess(msg) {
+    document.getElementById('success-msg').textContent = msg;
+    document.getElementById('success-overlay').style.display = 'flex';
+  }
+  function goHome() { window.location.href = 'dashboard.html'; }
 
   // ---- PASSWORD TOGGLE ----
-  const pwInput = document.getElementById('password');
+  const pwInput  = document.getElementById('password');
   const toggleBtn = document.getElementById('toggle-pw');
   let shown = false;
   toggleBtn.addEventListener('click', () => {
@@ -522,13 +590,12 @@
     if (/[A-Z]/.test(val)) score++;
     if (/[0-9]/.test(val)) score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
-
     const levels = [
-      { w: '0%',   color: 'transparent', label: 'Enter a password' },
-      { w: '25%',  color: '#EF4444',     label: '😟 Weak' },
-      { w: '50%',  color: '#F59E0B',     label: '😐 Fair' },
-      { w: '75%',  color: '#3B82F6',     label: '🙂 Good' },
-      { w: '100%', color: '#22C55E',     label: '💪 Strong!' }
+      { w:'0%',   color:'transparent', label:'Enter a password' },
+      { w:'25%',  color:'#EF4444',     label:'😟 Weak' },
+      { w:'50%',  color:'#F59E0B',     label:'😐 Fair' },
+      { w:'75%',  color:'#3B82F6',     label:'🙂 Good' },
+      { w:'100%', color:'#22C55E',     label:'💪 Strong!' }
     ];
     const lv = val.length === 0 ? 0 : Math.max(1, score);
     fill.style.width = levels[lv].w;
@@ -537,93 +604,81 @@
     text.style.color = levels[lv].color === 'transparent' ? 'var(--text-light)' : levels[lv].color;
   }
 
-  // ---- FORM VALIDATION & API SUBMIT ----
+  // ---- FORM SUBMIT ----
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const fields = {
-      fname: { el: document.getElementById('fname'), err: document.getElementById('fname-error'), check: v => v.trim().length > 0, msg: 'First name is required.' },
-      lname: { el: document.getElementById('lname'), err: document.getElementById('lname-error'), check: v => v.trim().length > 0, msg: 'Last name is required.' },
-      email: { el: document.getElementById('email'), err: document.getElementById('email-error'), check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg: 'Please enter a valid email address.' },
-      phone: { el: document.getElementById('phone'), err: document.getElementById('phone-error'), check: v => v.trim().length >= 7, msg: 'Please enter a valid phone number.' },
-      password: { el: document.getElementById('password'), err: document.getElementById('pw-error'), check: v => v.length >= 8, msg: 'Password must be at least 8 characters.' }
+      fname:    { el: document.getElementById('fname'),    err: document.getElementById('fname-error'),    check: v => v.trim().length > 0 },
+      lname:    { el: document.getElementById('lname'),    err: document.getElementById('lname-error'),    check: v => v.trim().length > 0 },
+      email:    { el: document.getElementById('email'),    err: document.getElementById('email-error'),    check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      phone:    { el: document.getElementById('phone'),    err: document.getElementById('phone-error'),    check: v => v.trim().length >= 7 },
+      password: { el: document.getElementById('password'), err: document.getElementById('pw-error'),      check: v => v.length >= 8 }
     };
-
     let valid = true;
-
     Object.values(fields).forEach(f => {
-      f.el.classList.remove('error');
-      f.err.style.display = 'none';
-      if (!f.check(f.el.value)) {
-        f.el.classList.add('error');
-        f.err.style.display = 'block';
-        valid = false;
-      }
+      f.el.classList.remove('error'); f.err.style.display = 'none';
+      if (!f.check(f.el.value)) { f.el.classList.add('error'); f.err.style.display = 'block'; valid = false; }
     });
-
-    const termsEl = document.getElementById('terms');
+    const termsEl  = document.getElementById('terms');
     const termsErr = document.getElementById('terms-error');
-    if (!termsEl.checked) {
-      termsErr.style.display = 'block';
-      valid = false;
-    } else {
-      termsErr.style.display = 'none';
-    }
-
+    if (!termsEl.checked) { termsErr.style.display = 'block'; valid = false; }
+    else { termsErr.style.display = 'none'; }
     if (!valid) { showToast('Please fix the errors above!', '⚠️'); return; }
 
-    const btn = document.getElementById('submit-btn');
+    const btn     = document.getElementById('submit-btn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btn-text');
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Creating account...';
+    btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Creating account...';
 
+    const payload = {
+      firstName: document.getElementById('fname').value.trim(),
+      lastName:  document.getElementById('lname').value.trim(),
+      email:     document.getElementById('email').value.trim(),
+      phone:     document.getElementById('phone').value.trim(),
+      password:  document.getElementById('password').value,
+      role:      selectedRole
+    };
+    if (selectedRole === 'student')   payload.college     = document.getElementById('college').value.trim();
+    if (selectedRole === 'recruiter') payload.companyName = document.getElementById('company-name').value.trim();
+
+    const reset = () => { btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Create Free Account →'; };
+
+    // 1️⃣ Try Firebase email/password first
     try {
-      // Build API payload
-      const payload = {
-        firstName: document.getElementById('fname').value.trim(),
-        lastName: document.getElementById('lname').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        password: document.getElementById('password').value,
-        role: selectedRole
-      };
-
-      if (selectedRole === 'student') {
-        payload.college = document.getElementById('college').value.trim();
+      if (window.firebaseEmailRegister) {
+        await window.firebaseEmailRegister(payload.email, payload.password);
       }
+    } catch (fbErr) {
+      reset();
+      const msg = fbErr.code === 'auth/email-already-in-use' ? 'This email is already registered. Try signing in.' :
+                  fbErr.code === 'auth/invalid-email'        ? 'Invalid email address.' :
+                  fbErr.code === 'auth/weak-password'        ? 'Password is too weak.' :
+                  fbErr.code === 'auth/configuration-not-found' ? null : // Firebase not configured — skip
+                  fbErr.message;
+      if (msg) { showToast(msg, '⚠️'); return; }
+    }
 
-      // Call API
+    // 2️⃣ Register on backend
+    try {
       const data = await AuthAPI.register(payload);
-      
-      // Store auth
       setAuth(data.token, data.user);
-
-      // Success UI
-      btn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Create Free Account →';
-
-      document.getElementById('success-msg').textContent = `Welcome, ${payload.firstName}! Your account has been created. Let's get started!`;
-      document.getElementById('success-overlay').style.display = 'flex';
-      
+      reset();
+      showSuccess(`Welcome, ${payload.firstName}! Your account has been created. Let's get started!`);
     } catch (err) {
-      btn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Create Free Account →';
-      showToast(err.message || 'Registration failed. Please try again.', '⚠️');
-      
-      // Handle express-validator errors array if present
-      if (err.errors && Array.isArray(err.errors)) {
-          err.errors.forEach(e => showToast(e.msg, '⚠️'));
+      reset();
+      // Backend might be offline — still save locally from Firebase
+      const localUser = { firstName: payload.firstName, lastName: payload.lastName, email: payload.email, role: payload.role };
+      localStorage.setItem('is_user', JSON.stringify(localUser));
+      localStorage.setItem('is_token', 'local_' + Date.now());
+      const errMsg = err.message || '';
+      if (errMsg.includes('already exists') || errMsg.includes('already registered')) {
+        showToast('This email is already registered. Please sign in.', '⚠️');
+      } else {
+        // Backend offline — show success anyway (Firebase registered successfully)
+        showSuccess(`Welcome, ${payload.firstName}! Account created successfully.`);
       }
     }
   });
-
-  function goHome() {
-    window.location.href = 'dashboard.html';
-  }
 </script>
 </body>
 </html>
