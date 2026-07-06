@@ -27,10 +27,12 @@ async function apiFetch(endpoint, options = {}) {
 
 // ── Auth API ──────────────────────────────────────────
 const AuthAPI = {
-  register: (body) => apiFetch('/auth/register', { method: 'POST', body: JSON.stringify(body) }),
-  login:    (body) => apiFetch('/auth/login',    { method: 'POST', body: JSON.stringify(body) }),
-  me:       ()     => apiFetch('/auth/me'),
-  logout:   ()     => apiFetch('/auth/logout',   { method: 'POST' }),
+  register:      (body) => apiFetch('/auth/register', { method: 'POST', body: JSON.stringify(body) }),
+  login:         (body) => apiFetch('/auth/login',    { method: 'POST', body: JSON.stringify(body) }),
+  googleLogin:   (body) => apiFetch('/auth/google',   { method: 'POST', body: JSON.stringify(body) }),
+  linkedinLogin: (body) => apiFetch('/auth/linkedin', { method: 'POST', body: JSON.stringify(body) }),
+  me:            ()     => apiFetch('/auth/me'),
+  logout:        ()     => apiFetch('/auth/logout',   { method: 'POST' }),
 };
 
 // ── Internships API ───────────────────────────────────

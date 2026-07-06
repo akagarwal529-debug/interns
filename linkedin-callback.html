@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkedIn Login - InternSaathi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #f7f9fc; flex-direction: column; }
+    .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: #0A66C2; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    h2 { color: #1e293b; margin: 0; }
+    p { color: #64748b; margin-top: 10px; text-align: center; max-width: 400px; }
+    .error-btn { margin-top: 20px; padding: 10px 20px; background: #0A66C2; color: white; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: 600; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="spinner" id="spinner"></div>
+  <h2 id="status-title">Verifying LinkedIn Login...</h2>
+  <p id="status-desc">Please wait while we securely connect your account.</p>
+  <a href="signin.html" class="error-btn" id="error-btn">Return to Sign In</a>
+
+  <script src="api.js"></script>
+  <script>
+    async function processLinkedInCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const error = urlParams.get('error');
+
+      const title = document.getElementById('status-title');
+      const desc = document.getElementById('status-desc');
+      const spinner = document.getElementById('spinner');
+      const btn = document.getElementById('error-btn');
+
+      if (error) {
+        spinner.style.display = 'none';
+        title.textContent = 'Login Canceled';
+        desc.textContent = 'You canceled the LinkedIn login or an error occurred.';
+        btn.style.display = 'block';
+        return;
+      }
+
+      if (!code) {
+        window.location.href = 'signin.html';
+        return;
+      }
+
+      try {
+        const currentUrl = window.location.origin + window.location.pathname;
+        const data = await AuthAPI.linkedinLogin({ code, redirectUri: currentUrl });
+        
+        setAuth(data.token, data.user);
+        
+        title.textContent = 'Success!';
+        desc.textContent = 'You are now logged in. Redirecting...';
+        spinner.style.borderLeftColor = '#22C55E';
+        
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+
+      } catch (err) {
+        spinner.style.display = 'none';
+        title.textContent = 'Authentication Failed';
+        desc.textContent = err.message || 'We could not connect to LinkedIn. Please try again later.';
+        btn.style.display = 'block';
+      }
+    }
+
+    // Run on load
+    window.onload = processLinkedInCode;
+  </script>
+</body>
+</html>
