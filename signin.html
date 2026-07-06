@@ -560,77 +560,23 @@
   <span id="toast-msg">Done!</span>
 </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
-  // 🔴 PASTE YOUR FIREBASE CONFIG HERE (same as register.html)
-  const firebaseConfig = {
-    apiKey:            "AIzaSyCQRGE3YyDI0csgkf5-fWwKD6VidJTTcto",
-    authDomain:        "internsaathi-1a85a.firebaseapp.com",
-    projectId:         "internsaathi-1a85a",
-    storageBucket:     "internsaathi-1a85a.firebasestorage.app",
-    messagingSenderId: "1085854699737",
-    appId:             "1:1085854699737:web:d575637e1c4cd375ebeec8",
-    measurementId:     "G-SY7RCYYPD1"
-  };
-
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const googleProvider = new GoogleAuthProvider();
-  googleProvider.setCustomParameters({ prompt: 'select_account' });
-
-  // ---- GOOGLE SIGN IN ----
-  window.signInWithGoogle = async function() {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user   = result.user;
-      const names  = (user.displayName || 'User').split(' ');
-      localStorage.setItem('is_token', await user.getIdToken());
-      localStorage.setItem('is_user', JSON.stringify({
-        firstName: names[0], lastName: names.slice(1).join(' ') || '',
-        email: user.email, photo: user.photoURL, role: 'student', provider: 'google'
-      }));
-      window.showToast('Welcome back, ' + names[0] + '! 🎉', '🎉');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
-    } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') window.showToast(err.message || 'Google sign-in failed.', '⚠️');
-    }
-  };
-
-  // ---- FIREBASE EMAIL LOGIN ----
-  window.firebaseEmailLogin = async function(email, password) {
-    return await signInWithEmailAndPassword(auth, email, password);
-  };
-
-  // ---- FIREBASE PASSWORD RESET ----
-  window.firebasePasswordReset = async function(email) {
-    await sendPasswordResetEmail(auth, email);
-  };
-
-  // ---- LINKEDIN ----
-  window.signInWithLinkedIn = function() {
-    window.showToast('LinkedIn login requires OAuth setup — use Google or email.', 'ℹ️');
-  };
-</script>
-
 <script src="api.js"></script>
 <script>
+  // Redirect if already logged in
   if (isLoggedIn()) { window.location.href = 'dashboard.html'; }
 
   // ---- TOAST ----
-  window.showToast = function(msg, icon = '✅') {
+  function showToast(msg, icon = '✅') {
     const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent  = msg;
+    document.getElementById('toast-msg').textContent = msg;
     document.getElementById('toast-icon').textContent = icon;
-    t.style.transform = 'translateY(0)'; t.style.opacity = '1';
-    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3500);
-  };
-  function showToast(msg, icon) { window.showToast(msg, icon); }
+    t.style.transform = 'translateY(0)';
+    t.style.opacity = '1';
+    setTimeout(() => { t.style.transform = 'translateY(80px)'; t.style.opacity = '0'; }, 3000);
+  }
 
   // ---- TOGGLE PASSWORD ----
-  const pwInput  = document.getElementById('password');
+  const pwInput = document.getElementById('password');
   const toggleBtn = document.getElementById('toggle-pw');
   let shown = false;
   toggleBtn.addEventListener('click', () => {
@@ -639,10 +585,9 @@
     toggleBtn.textContent = shown ? '🙈' : '👁️';
   });
 
-  // ---- SOCIAL LOGIN wired to Firebase ----
+  // ---- SOCIAL LOGIN ----
   function socialLogin(provider) {
-    if (provider === 'Google')   { if(window.signInWithGoogle)   window.signInWithGoogle();   else showToast('Firebase not configured yet.','⚠️'); }
-    if (provider === 'LinkedIn') { if(window.signInWithLinkedIn) window.signInWithLinkedIn(); }
+    showToast(`${provider} login coming soon!`, '🔗');
   }
 
   // ---- FORGOT PASSWORD ----
@@ -650,83 +595,73 @@
     e.preventDefault();
     document.getElementById('forgot-overlay').style.display = 'flex';
   });
-  function closeForgot() { document.getElementById('forgot-overlay').style.display = 'none'; }
 
-  async function sendReset() {
+  function closeForgot() {
+    document.getElementById('forgot-overlay').style.display = 'none';
+  }
+
+  function sendReset() {
     const email = document.getElementById('forgot-email').value.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showToast('Please enter a valid email!', '⚠️'); return;
+      showToast('Please enter a valid email!', '⚠️');
+      return;
     }
-    try {
-      if (window.firebasePasswordReset) {
-        await window.firebasePasswordReset(email);
-        closeForgot();
-        showToast('Reset link sent! Check your inbox 📧', '✅');
-      } else {
-        closeForgot();
-        showToast('Reset link sent! Check your inbox 📧', '✅');
-      }
-    } catch(err) {
-      showToast(err.code === 'auth/user-not-found' ? 'No account found with this email.' : 'Failed to send reset link.', '⚠️');
-    }
+    closeForgot();
+    showToast('Reset link sent! Check your inbox 📧', '✅');
   }
-  document.getElementById('forgot-overlay').addEventListener('click', function(e) { if (e.target === this) closeForgot(); });
 
-  // ---- SIGN IN FORM ----
+  document.getElementById('forgot-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeForgot();
+  });
+
+  // ---- FORM VALIDATION & SUBMIT (REAL API) ----
   document.getElementById('signin-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const emailEl = document.getElementById('email');
-    const passEl  = document.getElementById('password');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
     const emailErr = document.getElementById('email-error');
-    const pwErr    = document.getElementById('pw-error');
+    const pwErr = document.getElementById('pw-error');
     let valid = true;
-    emailEl.classList.remove('error'); passEl.classList.remove('error');
-    emailErr.style.display = 'none';   pwErr.style.display = 'none';
 
-    if (!emailEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
-      emailEl.classList.add('error'); emailErr.style.display = 'block'; valid = false;
+    email.classList.remove('error');
+    password.classList.remove('error');
+    emailErr.style.display = 'none';
+    pwErr.style.display = 'none';
+
+    if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      email.classList.add('error');
+      emailErr.style.display = 'block';
+      valid = false;
     }
-    if (!passEl.value || passEl.value.length < 6) {
-      passEl.classList.add('error'); pwErr.style.display = 'block'; valid = false;
+
+    if (!password.value || password.value.length < 6) {
+      password.classList.add('error');
+      pwErr.style.display = 'block';
+      valid = false;
     }
+
     if (!valid) return;
 
-    const btn     = document.getElementById('submit-btn');
+    const btn = document.getElementById('submit-btn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btn-text');
-    btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Signing in...';
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Signing in...';
 
-    const reset = () => { btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Sign In →'; };
-
-    // 1️⃣ Try Firebase email login first
     try {
-      if (window.firebaseEmailLogin) {
-        const fbResult = await window.firebaseEmailLogin(emailEl.value.trim(), passEl.value);
-        const fbUser   = fbResult.user;
-        const names    = (fbUser.displayName || emailEl.value.split('@')[0]).split(' ');
-        localStorage.setItem('is_token', await fbUser.getIdToken());
-        localStorage.setItem('is_user', JSON.stringify({ firstName: names[0], lastName: names.slice(1).join(' '), email: fbUser.email, role: 'student' }));
-        reset();
-        showToast('Welcome back, ' + names[0] + '! 🎉', '🎉');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
-        return;
-      }
-    } catch (fbErr) {
-      // If Firebase fails (e.g. user was created in MongoDB before Firebase was added),
-      // we just let it fall through and try the backend API.
-      console.log('Firebase login failed, trying backend...', fbErr.code);
-    }
-
-    // 2️⃣ Try backend login
-    try {
-      const data = await AuthAPI.login({ email: emailEl.value.trim(), password: passEl.value });
+      const data = await AuthAPI.login({
+        email: email.value.trim(),
+        password: password.value
+      });
       setAuth(data.token, data.user);
-      reset();
-      showToast(data.message || 'Welcome back! 🎉', '🎉');
+      showToast(data.message || 'Welcome back!', '🎉');
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
     } catch (err) {
-      reset();
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Sign In →';
       showToast(err.message || 'Login failed. Please try again.', '⚠️');
     }
   });
