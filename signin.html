@@ -713,13 +713,9 @@
         return;
       }
     } catch (fbErr) {
-      // If Firebase error is credentials-related, show error — don't try backend
-      if (fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/user-not-found') {
-        reset();
-        showToast('Invalid email or password.', '⚠️');
-        return;
-      }
-      // Other Firebase errors (e.g., not configured) — fall through to backend
+      // If Firebase fails (e.g. user was created in MongoDB before Firebase was added),
+      // we just let it fall through and try the backend API.
+      console.log('Firebase login failed, trying backend...', fbErr.code);
     }
 
     // 2️⃣ Try backend login
