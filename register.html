@@ -229,7 +229,7 @@
   <div class="nav-left">
     <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" class="nav-sunsys" />
     <div class="nav-divider"></div>
-    <a href="index (2).html" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       InternSaathi<span>.com</span>
     </a>
   </div>
@@ -505,7 +505,7 @@
       }));
       // Try to sync with backend (optional — won't break if backend is offline)
       try {
-        const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '')
           ? 'http://localhost:5000/api'
           : 'https://internsaathi-api.onrender.com/api';
         await fetch(API_BASE + '/auth/google-sync', {
@@ -650,13 +650,8 @@
         await window.firebaseEmailRegister(payload.email, payload.password);
       }
     } catch (fbErr) {
-      reset();
-      const msg = fbErr.code === 'auth/email-already-in-use' ? 'This email is already registered. Try signing in.' :
-                  fbErr.code === 'auth/invalid-email'        ? 'Invalid email address.' :
-                  fbErr.code === 'auth/weak-password'        ? 'Password is too weak.' :
-                  fbErr.code === 'auth/configuration-not-found' ? null : // Firebase not configured — skip
-                  fbErr.message;
-      if (msg) { showToast(msg, '⚠️'); return; }
+      console.warn('Firebase registration skipped:', fbErr.message);
+      // Continue to backend registration regardless of Firebase error
     }
 
     // 2️⃣ Register on backend

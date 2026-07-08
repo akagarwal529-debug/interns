@@ -405,7 +405,7 @@
   <div class="nav-left">
     <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" class="nav-sunsys" />
     <div class="nav-divider"></div>
-    <a href="index (2).html" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       InternSaathi<span>.com</span>
     </a>
   </div>
@@ -713,13 +713,8 @@
         return;
       }
     } catch (fbErr) {
-      // If Firebase error is credentials-related, show error — don't try backend
-      if (fbErr.code === 'auth/invalid-credential' || fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/user-not-found') {
-        reset();
-        showToast('Invalid email or password.', '⚠️');
-        return;
-      }
-      // Other Firebase errors (e.g., not configured) — fall through to backend
+      console.warn('Firebase login skipped, trying backend:', fbErr.message);
+      // Fall through to backend login
     }
 
     // 2️⃣ Try backend login

@@ -33,9 +33,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Serve frontend static files (from the parent directory where HTML files are)
 app.use(express.static(path.join(__dirname, '..')));
 
-// Default to index (2).html for the root
+// Default to index.html for the root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index (2).html'));
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // Serve about-us without .html extension

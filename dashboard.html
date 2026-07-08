@@ -133,7 +133,7 @@
   <div class="nav-left">
     <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" class="nav-sunsys" />
     <div class="nav-divider"></div>
-    <a href="index (2).html" class="nav-logo">
+    <a href="index.html" class="nav-logo">
       InternSaathi<span>.com</span>
     </a>
   </div>
@@ -154,18 +154,24 @@
     <button class="sidebar-item active" data-section="overview" onclick="switchSection('overview', this)">
       <span class="ico">📊</span> Overview
     </button>
-    <button class="sidebar-item" data-section="applications" onclick="switchSection('applications', this)">
+    <button class="sidebar-item student-only" data-section="applications" onclick="switchSection('applications', this)">
       <span class="ico">📋</span> My Applications
     </button>
-    <button class="sidebar-item" data-section="saved" onclick="switchSection('saved', this)">
+    <button class="sidebar-item student-only" data-section="saved" onclick="switchSection('saved', this)">
       <span class="ico">🔖</span> Saved Internships
     </button>
+    <button class="sidebar-item recruiter-only" data-section="postings" onclick="switchSection('postings', this)" style="display:none;">
+      <span class="ico">🏢</span> My Postings
+    </button>
+    <a href="post-internship.html" class="sidebar-item recruiter-only" style="text-decoration:none;display:none;">
+      <span class="ico">➕</span> Post Internship
+    </a>
     <div class="sidebar-sep"></div>
     <button class="sidebar-item" data-section="profile" onclick="switchSection('profile', this)">
       <span class="ico">👤</span> My Profile
     </button>
     <div class="sidebar-sep"></div>
-    <a href="index (2).html" class="sidebar-item" style="text-decoration:none">
+    <a href="index.html#latest" class="sidebar-item" style="text-decoration:none">
       <span class="ico">🔍</span> Browse Internships
     </a>
   </aside>
@@ -181,25 +187,27 @@
       <div class="stat-row">
         <div class="stat-card">
           <div class="stat-icon-box" style="background:#EFF6FF">📋</div>
-          <div><div class="stat-val" id="s-applied">0</div><div class="stat-lbl">Applications</div></div>
+          <div><div class="stat-val" id="s-stat1">0</div><div class="stat-lbl" id="lbl-stat1">Applications</div></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon-box" style="background:#FFF7ED">⏳</div>
-          <div><div class="stat-val" id="s-reviewing">0</div><div class="stat-lbl">Under Review</div></div>
+          <div><div class="stat-val" id="s-stat2">0</div><div class="stat-lbl" id="lbl-stat2">Under Review</div></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon-box" style="background:#F0FDF4">🎉</div>
-          <div><div class="stat-val" id="s-shortlisted">0</div><div class="stat-lbl">Shortlisted</div></div>
+          <div><div class="stat-val" id="s-stat3">0</div><div class="stat-lbl" id="lbl-stat3">Shortlisted</div></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card student-only">
           <div class="stat-icon-box" style="background:#F5F3FF">🔖</div>
-          <div><div class="stat-val" id="s-saved">0</div><div class="stat-lbl">Saved</div></div>
+          <div><div class="stat-val" id="s-stat4">0</div><div class="stat-lbl">Saved</div></div>
         </div>
       </div>
 
-      <h2 style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Recent Applications</h2>
-      <div class="app-list" id="recent-apps">
-        <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications yet</div><div class="sub"><a href="index (2).html">Browse internships</a> and start applying!</div></div>
+      <div class="student-only">
+        <h2 style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:14px">Recent Applications</h2>
+        <div class="app-list" id="recent-apps">
+          <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications yet</div><div class="sub"><a href="index.html#latest">Browse internships</a> and start applying!</div></div>
+        </div>
       </div>
     </div>
 
@@ -216,16 +224,34 @@
         <button class="tab" onclick="filterApps('rejected',this)">Rejected</button>
       </div>
       <div class="app-list" id="all-apps">
-        <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications</div><div class="sub"><a href="index (2).html">Browse internships</a> and apply!</div></div>
+        <div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications</div><div class="sub"><a href="index.html#latest">Browse internships</a> and apply!</div></div>
       </div>
     </div>
 
     <!-- ─── SAVED ─── -->
-    <div class="section-panel" id="sec-saved">
+    <div class="section-panel student-only" id="sec-saved">
       <h1 class="page-title">Saved Internships</h1>
       <p class="page-sub">Internships you've bookmarked for later.</p>
       <div class="saved-grid" id="saved-grid">
-        <div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔖</div><div class="msg">No saved internships</div><div class="sub"><a href="index (2).html">Browse and save</a> internships you like!</div></div>
+        <div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔖</div><div class="msg">No saved internships</div><div class="sub"><a href="index.html#latest">Browse and save</a> internships you like!</div></div>
+      </div>
+    </div>
+
+    <!-- ─── MY POSTINGS (Recruiter) ─── -->
+    <div class="section-panel recruiter-only" id="sec-postings">
+      <h1 class="page-title">My Postings</h1>
+      <p class="page-sub">Manage your internships and view applicants.</p>
+      <div class="app-list" id="postings-list">
+        <div class="empty-state"><div class="emoji">🏢</div><div class="msg">No postings yet</div><div class="sub"><a href="post-internship.html">Post an internship</a> to get started!</div></div>
+      </div>
+    </div>
+
+    <!-- ─── APPLICANTS VIEW (Recruiter) ─── -->
+    <div class="section-panel recruiter-only" id="sec-applicants">
+      <button class="btn-withdraw" style="margin-bottom:16px" onclick="switchSection('postings', document.querySelector('[data-section=postings]'))">← Back to Postings</button>
+      <h1 class="page-title" id="applicants-title">Applicants</h1>
+      <p class="page-sub">Review and manage candidates.</p>
+      <div class="app-list" id="applicants-list">
       </div>
     </div>
 
@@ -252,23 +278,56 @@
           <label class="field-label">Phone</label>
           <input class="form-input" id="pf-phone" placeholder="+91 98765 43210" />
         </div>
-        <div class="field-group">
-          <label class="field-label">College / University</label>
-          <input class="form-input" id="pf-college" placeholder="e.g. IIT Bombay" />
-        </div>
-        <div class="two-col">
+        <div class="student-fields">
           <div class="field-group">
-            <label class="field-label">Degree</label>
-            <input class="form-input" id="pf-degree" placeholder="e.g. B.Tech CSE" />
+            <label class="field-label">College / University</label>
+            <input class="form-input" id="pf-college" placeholder="e.g. IIT Bombay" />
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Degree</label>
+              <input class="form-input" id="pf-degree" placeholder="e.g. B.Tech CSE" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Graduation Year</label>
+              <input class="form-input" id="pf-year" type="number" placeholder="2026" />
+            </div>
           </div>
           <div class="field-group">
-            <label class="field-label">Graduation Year</label>
-            <input class="form-input" id="pf-year" type="number" placeholder="2026" />
+            <label class="field-label">Skills (comma separated)</label>
+            <input class="form-input" id="pf-skills" placeholder="React, Python, Figma..." />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Upload Resume (PDF)</label>
+            <input class="form-input" id="pf-resume" type="file" accept=".pdf" />
+            <div id="pf-resume-link" style="margin-top:6px;font-size:13px;display:none;"></div>
           </div>
         </div>
-        <div class="field-group">
-          <label class="field-label">Skills (comma separated)</label>
-          <input class="form-input" id="pf-skills" placeholder="React, Python, Figma..." />
+
+        <div class="recruiter-fields" style="display:none;">
+          <div class="field-group">
+            <label class="field-label" id="lbl-company">Company Name</label>
+            <input class="form-input" id="pf-company" placeholder="e.g. Google" />
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Designation</label>
+              <input class="form-input" id="pf-designation" placeholder="e.g. HR Manager" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">City</label>
+              <input class="form-input" id="pf-city" placeholder="e.g. Bengaluru" />
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Website</label>
+            <input class="form-input" id="pf-website" placeholder="https://..." />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Company Logo (Image)</label>
+            <input class="form-input" id="pf-logo" type="file" accept="image/*" />
+            <div id="pf-logo-link" style="margin-top:6px;font-size:13px;display:none;"></div>
+          </div>
         </div>
         <div class="field-group">
           <label class="field-label">Short Bio</label>
@@ -300,9 +359,35 @@
         document.getElementById('user-avatar').textContent = (user.firstName?.[0]||'') + (user.lastName?.[0]||'');
         document.getElementById('welcome-msg').textContent = `Welcome back, ${user.firstName}! 👋`;
         fillProfile(user);
+
+        if (user.role === 'recruiter' || user.role === 'college') {
+          document.querySelectorAll('.student-only').forEach(el => el.style.display = 'none');
+          document.querySelectorAll('.recruiter-only').forEach(el => el.style.display = '');
+          
+          document.querySelector('.student-fields').style.display = 'none';
+          document.querySelector('.recruiter-fields').style.display = 'block';
+
+          if (user.role === 'college') {
+             document.getElementById('lbl-company').textContent = 'Institution Name';
+          }
+          
+          document.getElementById('lbl-stat1').textContent = 'Postings';
+          document.getElementById('lbl-stat2').textContent = 'Applicants';
+          document.getElementById('lbl-stat3').textContent = 'Shortlisted';
+          
+          await loadPostings();
+        } else {
+          document.querySelectorAll('.recruiter-only').forEach(el => el.style.display = 'none');
+          document.querySelector('.student-fields').style.display = 'block';
+          document.querySelector('.recruiter-fields').style.display = 'none';
+          await loadApplications();
+          await loadSaved();
+        }
+
+        if (window.location.hash === '#profile') {
+          switchSection('profile', document.querySelector('[data-section="profile"]'));
+        }
       }
-      await loadApplications();
-      await loadSaved();
     } catch (err) {
       console.error('Init error:', err);
     }
@@ -328,7 +413,7 @@
   function renderApps(apps, containerId) {
     const container = document.getElementById(containerId);
     if (!apps.length) {
-      container.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications found</div><div class="sub"><a href="index (2).html">Browse internships</a> and start applying!</div></div>';
+      container.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><div class="msg">No applications found</div><div class="sub"><a href="index.html#latest">Browse internships</a> and start applying!</div></div>';
       return;
     }
     container.innerHTML = apps.map(app => `
@@ -367,40 +452,139 @@
     } catch (err) { showToast(err.message, '⚠️'); }
   }
 
+  // ── Recruiter Methods ──
+  async function loadPostings() {
+    try {
+      const data = await InternshipAPI.myPostings();
+      const postings = data.internships || [];
+      const list = document.getElementById('postings-list');
+      
+      document.getElementById('s-stat1').textContent = postings.length;
+      
+      let totalApps = 0;
+      postings.forEach(p => totalApps += (p.applicantCount || 0));
+      document.getElementById('s-stat2').textContent = totalApps;
+      
+      if (!postings.length) {
+        list.innerHTML = '<div class="empty-state"><div class="emoji">🏢</div><div class="msg">No postings yet</div><div class="sub"><a href="post-internship.html">Post an internship</a> to get started!</div></div>';
+        return;
+      }
+      
+      list.innerHTML = postings.map(p => `
+        <div class="app-card">
+          <div class="app-logo" style="background:${p.companyColor || '#0B1D3A'}">${p.company?.[0] || 'C'}</div>
+          <div class="app-info">
+            <div class="app-title">${p.title}</div>
+            <div class="app-company">${p.location} · ${p.type}</div>
+            <div class="app-meta">
+              <span class="app-tag">${p.applicantCount || 0} Applicants</span>
+            </div>
+          </div>
+          <div class="app-status">
+            <span class="status-badge ${p.isActive ? 'status-selected' : 'status-rejected'}">${p.isActive ? 'Active' : 'Closed'}</span>
+            <button class="btn-withdraw" style="color:var(--navy);border-color:var(--navy)" onclick="viewApplicants('${p._id}', '${p.title}')">View Applicants</button>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function viewApplicants(id, title) {
+    switchSection('applicants', document.querySelector('[data-section="postings"]'));
+    document.getElementById('applicants-title').textContent = 'Applicants for ' + title;
+    const list = document.getElementById('applicants-list');
+    list.innerHTML = '<div class="empty-state">Loading...</div>';
+    
+    try {
+      const data = await ApplicationAPI.forListing(id);
+      const apps = data.applications || [];
+      
+      if (!apps.length) {
+        list.innerHTML = '<div class="empty-state"><div class="emoji">📭</div><div class="msg">No applicants yet.</div></div>';
+        return;
+      }
+      
+      let shortlistedCount = apps.filter(a => a.status === 'shortlisted' || a.status === 'selected').length;
+      document.getElementById('s-stat3').textContent = shortlistedCount;
+
+      list.innerHTML = apps.map(a => `
+        <div class="app-card" id="app-${a._id}">
+          <div class="app-info">
+            <div class="app-title">${a.applicant?.firstName || ''} ${a.applicant?.lastName || ''}</div>
+            <div class="app-company">${a.applicant?.college || 'Unknown College'} · ${a.applicant?.degree || ''}</div>
+            <div class="app-meta">
+              <span class="app-tag">${a.applicant?.email || ''}</span>
+              ${a.applicant?.phone ? `<span class="app-tag">${a.applicant.phone}</span>` : ''}
+              ${a.applicant?.resumeUrl ? `<a href="${a.applicant.resumeUrl}" target="_blank" class="app-tag" style="text-decoration:none;color:var(--blue)">📄 View Resume</a>` : ''}
+            </div>
+          </div>
+          <div class="app-status">
+            <select onchange="updateAppStatus('${a._id}', this.value)" style="padding:6px;border-radius:4px;border:1px solid var(--border)">
+              <option value="applied" ${a.status==='applied'?'selected':''}>Applied</option>
+              <option value="reviewing" ${a.status==='reviewing'?'selected':''}>Reviewing</option>
+              <option value="shortlisted" ${a.status==='shortlisted'?'selected':''}>Shortlisted</option>
+              <option value="selected" ${a.status==='selected'?'selected':''}>Selected</option>
+              <option value="rejected" ${a.status==='rejected'?'selected':''}>Rejected</option>
+            </select>
+          </div>
+        </div>
+      `).join('');
+    } catch(err) {
+      list.innerHTML = '<div class="empty-state" style="color:red">Error loading applicants</div>';
+    }
+  }
+
+  async function updateAppStatus(appId, status) {
+    try {
+      await ApplicationAPI.updateStatus(appId, { status });
+      showToast('Status updated successfully.', '✅');
+      // update stat3 logic potentially here if needed, but simplistic is fine.
+    } catch(err) {
+      showToast(err.message, '⚠️');
+    }
+  }
+
   // ── Load Saved ──
   async function loadSaved() {
     try {
       const data = await UserAPI.saved();
       const saved = data.saved || [];
-      document.getElementById('s-saved').textContent = saved.length;
+      document.getElementById('s-stat4').textContent = saved.length;
+      
       const grid = document.getElementById('saved-grid');
-      if (!saved.length) {
-        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="emoji">🔖</div><div class="msg">No saved internships</div><div class="sub"><a href="index (2).html">Browse and save</a> internships you like!</div></div>';
+      if (saved.length === 0) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="emoji">📭</div><div class="msg">No saved internships</div><div class="sub"><a href="index.html">Browse and save</a> internships you like!</div></div>';
         return;
       }
-      grid.innerHTML = saved.map(s => `
+      
+      grid.innerHTML = saved.map(job => `
         <div class="saved-card">
-          <div class="s-title">${s.title}</div>
-          <div class="s-company">${s.company} · ${s.location}</div>
-          <div class="s-pay">₹${(s.stipend || 0).toLocaleString()}/month</div>
+          <div class="s-title">${job.title}</div>
+          <div class="s-company">${job.company} · ${job.location || 'Remote'}</div>
+          <div class="s-pay">₹${(job.stipend || 0).toLocaleString()}/mo</div>
           <div class="saved-btns">
-            <button class="btn-view" onclick="window.location.href='index (2).html'">View</button>
-            <button class="btn-unsave" onclick="unsaveJob('${s._id}')">Remove</button>
+            <button class="btn-apply" style="flex:1" onclick="window.location.href='index.html'">View</button>
+            <button class="btn-withdraw" style="flex:1" onclick="unsaveInternship('${job._id}')">Remove</button>
           </div>
         </div>
       `).join('');
-    } catch (err) { console.log('Could not load saved:', err.message); }
+    } catch (err) {
+      console.log('Error loading saved internships:', err.message);
+    }
   }
 
-  async function unsaveJob(id) {
+  window.unsaveInternship = async function(id) {
+    if (!confirm('Remove from saved?')) return;
     try {
-      await UserAPI.save(id);
-      showToast('Removed from saved.', '✅');
+      await UserAPI.save(id); // POST /api/users/save/:id toggles the state!
+      showToast('Removed from saved.', '🗑️');
       await loadSaved();
-    } catch (err) { showToast(err.message, '⚠️'); }
-  }
-
-  // ── Profile ──
+    } catch (err) {
+      showToast(err.message, '⚠️');
+    }
+  };  // ── Profile ──
   function fillProfile(user) {
     document.getElementById('pf-fname').value   = user.firstName || '';
     document.getElementById('pf-lname').value   = user.lastName || '';
@@ -411,10 +595,30 @@
     document.getElementById('pf-year').value    = user.graduationYear || '';
     document.getElementById('pf-skills').value  = (user.skills || []).join(', ');
     document.getElementById('pf-bio').value     = user.bio || '';
+
+    if (user.resumeUrl) {
+      const rl = document.getElementById('pf-resume-link');
+      rl.style.display = 'block';
+      rl.innerHTML = `<a href="${user.resumeUrl}" target="_blank" style="color:var(--blue);text-decoration:none">📄 View Current Resume</a>`;
+    }
+    if (user.profilePhoto) {
+      const pl = document.getElementById('pf-logo-link');
+      pl.style.display = 'block';
+      pl.innerHTML = `<a href="${user.profilePhoto}" target="_blank" style="color:var(--blue);text-decoration:none">🖼️ View Current Logo</a>`;
+    }
+    
+    document.getElementById('pf-company').value = user.companyName || '';
+    document.getElementById('pf-designation').value = user.designation || '';
+    document.getElementById('pf-city').value    = user.city || '';
+    document.getElementById('pf-website').value = user.companyWebsite || '';
   }
 
   document.getElementById('profile-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+
     try {
       const body = {
         firstName:      document.getElementById('pf-fname').value.trim(),
@@ -425,12 +629,40 @@
         graduationYear: Number(document.getElementById('pf-year').value) || undefined,
         skills:         document.getElementById('pf-skills').value.split(',').map(s => s.trim()).filter(Boolean),
         bio:            document.getElementById('pf-bio').value.trim(),
+        companyName:    document.getElementById('pf-company').value.trim(),
+        designation:    document.getElementById('pf-designation').value.trim(),
+        city:           document.getElementById('pf-city').value.trim(),
+        companyWebsite: document.getElementById('pf-website').value.trim(),
       };
+
+      // Upload Resume if selected
+      const resumeFile = document.getElementById('pf-resume').files[0];
+      if (resumeFile) {
+        btn.textContent = 'Uploading Resume...';
+        const resData = await UploadAPI.uploadFile(resumeFile);
+        body.resumeUrl = resData.url;
+      }
+
+      // Upload Logo if selected
+      const logoFile = document.getElementById('pf-logo').files[0];
+      if (logoFile) {
+        btn.textContent = 'Uploading Logo...';
+        const logoData = await UploadAPI.uploadFile(logoFile);
+        body.profilePhoto = logoData.url;
+      }
+
+      btn.textContent = 'Saving Profile...';
       const data = await UserAPI.update(body);
       setAuth(getToken(), data.user);
       showToast('Profile updated! ✅', '✅');
       document.getElementById('user-name-nav').textContent = body.firstName + ' ' + body.lastName;
-    } catch (err) { showToast(err.message, '⚠️'); }
+      fillProfile(data.user); // Refresh UI with new links
+    } catch (err) { 
+      showToast(err.message, '⚠️'); 
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
   });
 
   // ── Sidebar Navigation ──

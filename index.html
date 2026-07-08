@@ -23,18 +23,25 @@
           style="height:44px;width:auto;object-fit:contain;"
         />
         <div style="width:1px;height:32px;background:#E5E7EB;"></div>
-        <a href="#" class="navbar-logo" id="logo">
+        <a href="index.html" class="navbar-logo" id="logo">
           InternSaathi<span>.com</span>
         </a>
       </div>
 
       <nav class="navbar-nav" id="nav-menu">
-        <a href="#" class="active">Home Page</a>
+        <a href="#latest" class="active">Browse Internships</a>
       </nav>
 
       <div class="navbar-actions">
         <a href="signin.html" class="btn-signin" id="signin-btn" style="text-decoration:none;display:inline-flex;align-items:center;">Sign In</a>
         <a href="register.html" class="btn-register" id="register-btn" style="text-decoration:none;display:inline-flex;align-items:center;">Register Free →</a>
+        
+        <div id="user-menu" style="display:none;align-items:center;gap:12px;">
+          <a href="dashboard.html" style="background:transparent;border:1px solid #E5E7EB;border-radius:8px;padding:8px 16px;text-decoration:none;font-size:14px;font-weight:600;color:#374151;transition:all 0.2s;">Dashboard</a>
+          <a href="dashboard.html#profile" style="background:transparent;border:1px solid #E5E7EB;border-radius:8px;padding:8px 16px;text-decoration:none;font-size:14px;font-weight:600;color:#374151;transition:all 0.2s;">Profile</a>
+          <button onclick="clearAuth(); window.location.reload();" style="background:transparent;border:none;cursor:pointer;color:#EF4444;font-weight:600;font-size:14px;padding:8px 12px;transition:all 0.2s;">Logout</button>
+        </div>
+
         <div class="hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0">
           <span></span><span></span><span></span>
         </div>
@@ -105,9 +112,9 @@
         </p>
 
         <div class="hero-ctas fade-in fade-in-delay-3">
-          <button class="btn btn-navy" id="student-btn">
+          <a href="#latest" class="btn btn-navy" id="student-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
             🎓 I am a Student – Find Internships
-          </button>
+          </a>
           <a href="post-internship.html" class="btn btn-outline" id="recruiter-btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
             🏢 I am a Recruiter – Post an Internship
           </a>
@@ -498,7 +505,7 @@
         <h2 class="section-title">Latest Internship Opportunities</h2>
         <p class="section-sub">New listings added every day – apply before they're gone!</p>
       </div>
-      <a href="#" class="see-all">Show All Internships →</a>
+      <a href="#search" class="see-all" onclick="resetSearch(event)">Show All Internships →</a>
     </div>
 
     <div class="internship-grid" id="internship-grid">
