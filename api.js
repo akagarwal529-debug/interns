@@ -6,7 +6,7 @@
 
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:5000/api'
-  : 'https://internsaathi-api.onrender.com/api';
+  : 'https://admin.internsaathi.com/api';
 
 // ── Auth helpers ──────────────────────────────────────
 const getToken  = ()        => localStorage.getItem('is_token');
@@ -18,10 +18,21 @@ const isLoggedIn= ()        => !!getToken();
 // ── Core fetch wrapper ────────────────────────────────
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
-  const headers = { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }), ...(options.headers || {}) };
+  const headers = { ...(token && { Authorization: `Bearer ${token}` }), ...(options.headers || {}) };
+  
+  // Only set application/json if body is not FormData
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
+
   const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
   const data = await response.json();
-  if (!response.ok) throw new Error(data.message || 'Something went wrong');
+  if (!response.ok) {
+    if (data.errors && data.errors.length > 0) {
+      throw new Error(data.errors.map(e => e.msg).join('\n'));
+    }
+    throw new Error(data.message || 'Something went wrong');
+  }
   return data;
 }
 
@@ -40,6 +51,7 @@ const InternshipAPI = {
   getAll:    (params = {}) => apiFetch('/internships?' + new URLSearchParams(params)),
   getFeatured: ()          => apiFetch('/internships/featured'),
   getById:   (id)          => apiFetch(`/internships/${id}`),
+  myPostings:()            => apiFetch('/internships/mine'),
   create:    (body)        => apiFetch('/internships', { method: 'POST', body: JSON.stringify(body) }),
   update:    (id, body)    => apiFetch(`/internships/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   delete:    (id)          => apiFetch(`/internships/${id}`, { method: 'DELETE' }),
@@ -61,6 +73,15 @@ const UserAPI = {
   save:       (id)        => apiFetch(`/users/save/${id}`, { method: 'POST' }),
   saved:      ()          => apiFetch('/users/saved'),
   stats:      ()          => apiFetch('/users/stats'),
+};
+
+// ── Upload API ────────────────────────────────────────
+const UploadAPI = {
+  uploadFile: (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return apiFetch('/upload', { method: 'POST', body: formData });
+  }
 };
 
 // ── Navbar updater (call on every page) ──────────────

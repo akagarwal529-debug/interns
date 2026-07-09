@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -66,11 +66,11 @@
 </head>
 <body>
 <nav class="navbar">
-  <a href="index (2).html" class="nav-brand">
+  <a href="index.html" class="nav-brand">
     <img src="internsaathi-logo.jpeg" alt="InternSaathi Logo" />
     <span class="nav-brand-text">InternSaathi<span>.com</span></span>
   </a>
-  <a href="index (2).html" class="nav-back">&#8592; Back to Home</a>
+  <a href="index.html" class="nav-back">&#8592; Back to Home</a>
 </nav>
 
 <div class="page-hero">
@@ -138,7 +138,7 @@
       <div class="succ-icon">&#9989;</div>
       <h2>Internship Posted Successfully!</h2>
       <p>Our team will review and publish your listing within 24 hours.<br/>We will notify you at the email you provided.</p>
-      <a href="index (2).html" class="btn-home">&#8592; Back to Home</a>
+      <a href="index.html" class="btn-home">&#8592; Back to Home</a>
     </div>
 
   </div>
@@ -148,11 +148,20 @@
   &copy; 2025 InternSaathi.com &middot; Powered by <strong>SunSys Techsol Pvt. Ltd.</strong>
 </footer>
 
+<script src="api.js"></script>
 <script>
   function toggleStipend(el) {
     document.getElementById('stipendGroup').style.display = el.checked ? 'block' : 'none';
   }
+
   async function submitForm() {
+    // Check if logged in
+    if (!isLoggedIn()) {
+      alert('You must be logged in as a recruiter or college to post an internship.');
+      window.location.href = 'signin.html';
+      return;
+    }
+
     const req = ['companyName','industry','recruiterName','email','title','workMode','duration','openings','description'];
     for (const id of req) {
       const el = document.getElementById(id);
@@ -165,12 +174,54 @@
         return;
       }
     }
+
+    if (document.getElementById('description').value.trim().length < 50) {
+      alert('The Internship Description must be at least 50 characters long.');
+      return;
+    }
+
     const btn = document.querySelector('.btn-submit');
-    btn.textContent = 'Submitting...';
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Submitting...';
     btn.disabled = true;
-    await new Promise(r => setTimeout(r, 1500));
-    document.querySelectorAll('.form-section,.submit-area').forEach(el => el.style.display='none');
-    document.getElementById('success-box').style.display = 'block';
+
+    try {
+      // Map workMode to backend type enum
+      const modeMap = { 'Remote': 'online', 'On-site': 'offline', 'Hybrid': 'hybrid' };
+      const selectedMode = document.getElementById('workMode').value;
+      const type = modeMap[selectedMode] || 'online';
+
+      const perksInput = document.getElementById('perks').value;
+      const perks = perksInput ? perksInput.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+      const reqInput = document.getElementById('requirements').value;
+      const skills = reqInput ? reqInput.split(/[\n,]+/).map(s => s.trim()).filter(Boolean) : [];
+
+      const payload = {
+        title: document.getElementById('title').value.trim(),
+        company: document.getElementById('companyName').value.trim(),
+        location: document.getElementById('location').value.trim() || 'Remote',
+        type: type,
+        duration: document.getElementById('duration').value,
+        openings: Number(document.getElementById('openings').value) || 1,
+        description: document.getElementById('description').value.trim(),
+        requirements: reqInput.trim(),
+        skills: skills,
+        stipend: document.getElementById('paidToggle').checked ? (Number(document.getElementById('stipend').value) || 0) : 0,
+        perks: perks,
+        category: 'Other' // Default category
+      };
+
+      await InternshipAPI.create(payload);
+
+      document.querySelectorAll('.form-section,.submit-area').forEach(el => el.style.display='none');
+      document.getElementById('success-box').style.display = 'block';
+
+    } catch (err) {
+      alert(err.message || 'Failed to post internship. Please try again.');
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
   }
 </script>
 </body>

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // ---------- FETCH & RENDER INTERNSHIPS ----------
 async function loadFeaturedInternships() {
-  const container = document.getElementById('internships-container');
+  const container = document.getElementById('internship-grid');
   if (!container) return; // Only on homepage
   
   try {
@@ -46,7 +46,10 @@ async function loadFeaturedInternships() {
         </div>
         <div class="ic-footer">
           <span class="ic-applicants">${job.applicantCount || 0} applicants</span>
-          <button class="btn-apply" onclick="applyNow('${job._id}', '${job.title}')">Apply Now →</button>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button onclick="saveInternship('${job._id}')" style="background:transparent;border:none;cursor:pointer;font-size:20px;transition:transform 0.2s;" title="Save">🔖</button>
+            <button class="btn-apply" onclick="applyNow('${job._id}', '${job.title}')">Apply Now →</button>
+          </div>
         </div>
       </div>
     `).join('');
@@ -115,11 +118,57 @@ async function submitApplication() {
   }
 }
 
+window.saveInternship = async function(id) {
+  if (!isLoggedIn()) {
+    showToast('Please sign in to save!', '🔒');
+    setTimeout(() => { window.location.href = 'signin.html'; }, 1500);
+    return;
+  }
+  const user = getUser();
+  if (user && user.role !== 'student') {
+    showToast('Only students can save internships!', '⚠️');
+    return;
+  }
+  try {
+    const res = await UserAPI.save(id);
+    showToast(res.message, res.saved ? '🔖' : '🗑️');
+    
+    // Optionally update the heart/bookmark icon by transforming the clicked button
+    if (event && event.currentTarget) {
+      event.currentTarget.style.transform = 'scale(1.3)';
+      setTimeout(() => event.currentTarget.style.transform = 'scale(1)', 200);
+    }
+  } catch (err) {
+    showToast(err.message || 'Error saving internship', '⚠️');
+  }
+};
+
 document.getElementById('modal-overlay')?.addEventListener('click', function (e) {
   if (e.target === this) closeModal();
 });
 
 // ---------- SEARCH FUNCTIONALITY ----------
+window.resetSearch = function(event) {
+  if (event) event.preventDefault();
+  
+  // Clear all filters
+  if (document.getElementById('search-keyword')) document.getElementById('search-keyword').value = '';
+  if (document.getElementById('search-city')) document.getElementById('search-city').value = '';
+  if (document.getElementById('search-pay')) document.getElementById('search-pay').value = '';
+  if (document.getElementById('search-state')) document.getElementById('search-state').value = '';
+  
+  // Reset work type to all
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  const allBtn = document.getElementById('type-all');
+  if (allBtn) allBtn.classList.add('active');
+  
+  // Trigger the search to load all
+  document.getElementById('find-btn')?.click();
+  
+  // Scroll smoothly to search section
+  document.getElementById('search')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 document.getElementById('find-btn')?.addEventListener('click', async () => {
   const keyword = document.getElementById('search-keyword').value.trim();
   const city    = document.getElementById('search-city').value;
@@ -144,7 +193,7 @@ document.getElementById('find-btn')?.addEventListener('click', async () => {
 
   try {
     const data = await InternshipAPI.getAll(params);
-    const container = document.getElementById('internships-container');
+    const container = document.getElementById('internship-grid');
     const internships = data.internships || [];
 
     if (internships.length === 0) {
@@ -170,7 +219,10 @@ document.getElementById('find-btn')?.addEventListener('click', async () => {
           </div>
           <div class="ic-footer">
             <span class="ic-applicants">${job.applicantCount || 0} applicants</span>
-            <button class="btn-apply" onclick="applyNow('${job._id}', '${job.title}')">Apply Now →</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button onclick="saveInternship('${job._id}')" style="background:transparent;border:none;cursor:pointer;font-size:20px;transition:transform 0.2s;" title="Save">🔖</button>
+              <button class="btn-apply" onclick="applyNow('${job._id}', '${job.title}')">Apply Now →</button>
+            </div>
           </div>
         </div>
       `).join('');
