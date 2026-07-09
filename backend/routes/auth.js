@@ -4,7 +4,10 @@ const jwt     = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User    = require('../models/User');
 const { protect } = require('../middleware/auth');
+const { OAuth2Client } = require('google-auth-library');
+const axios = require('axios');
 
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Helper: generate JWT
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
@@ -57,6 +60,74 @@ router.post('/login', [
 
     sendToken(user, 200, res, `Welcome back, ${user.firstName}!`);
   } catch (err) { next(err); }
+});
+
+// ── POST /api/auth/google ────────────────────────────────
+router.post('/google', async (req, res, next) => {
+  try {
+    const { credential } = req.body;
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { email, given_name, family_name } = payload;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        firstName: given_name || 'User',
+        lastName: family_name || '',
+        email,
+        password: Math.random().toString(36).slice(-10) + 'A1!',
+        role: 'student'
+      });
+    }
+    sendToken(user, 200, res, `Welcome back, ${user.firstName}!`);
+  } catch (err) {
+    res.status(401).json({ success: false, message: 'Google authentication failed' });
+  }
+});
+
+// ── POST /api/auth/linkedin ──────────────────────────────
+router.post('/linkedin', async (req, res, next) => {
+  try {
+    const { code, redirectUri } = req.body;
+    
+    // 1. Exchange auth code for access token
+    const tokenResponse = await axios.post('https://www.linkedin.com/oauth/v2/accessToken', null, {
+      params: {
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri: redirectUri,
+        client_id: process.env.LINKEDIN_CLIENT_ID,
+        client_secret: process.env.LINKEDIN_CLIENT_SECRET
+      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+    const accessToken = tokenResponse.data.access_token;
+
+    // 2. Fetch user profile
+    const profileResponse = await axios.get('https://api.linkedin.com/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const { email, given_name, family_name } = profileResponse.data;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        firstName: given_name || 'User',
+        lastName: family_name || '',
+        email,
+        password: Math.random().toString(36).slice(-10) + 'A1!',
+        role: 'student'
+      });
+    }
+    sendToken(user, 200, res, `Welcome back, ${user.firstName}!`);
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(401).json({ success: false, message: 'LinkedIn authentication failed' });
+  }
 });
 
 // ── GET /api/auth/me ─────────────────────────────────────

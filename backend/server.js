@@ -59,6 +59,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// ── Keep-Awake Ping ──────────────────────────────────────
+app.get('/api/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 // ── 404 Handler ──────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
